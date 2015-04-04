@@ -1,8 +1,8 @@
-package pl.edu.agh.awi.downloader.flights.zone.data.converter.converter;
+package pl.edu.agh.awi.downloader.flights.zone.data.converter;
 
 import pl.edu.agh.awi.downloader.exceptions.ZoneResponseConverterException;
-import pl.edu.agh.awi.downloader.flights.zone.data.converter.Zone;
-import pl.edu.agh.awi.downloader.flights.zone.data.converter.ZoneResponse;
+import pl.edu.agh.awi.downloader.flights.zone.data.Zone;
+import pl.edu.agh.awi.downloader.flights.zone.data.ZoneResponse;
 
 import java.util.*;
 

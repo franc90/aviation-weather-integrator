@@ -1,8 +1,8 @@
-package pl.edu.agh.awi.downloader.flights.zone.data.converter.converter;
+package pl.edu.agh.awi.downloader.flights.zone.data.converter;
 
 import com.google.common.collect.ImmutableList;
 import pl.edu.agh.awi.downloader.exceptions.ZoneResponseConverterException;
-import pl.edu.agh.awi.downloader.flights.zone.data.converter.Zone;
+import pl.edu.agh.awi.downloader.flights.zone.data.Zone;
 
 import java.util.ArrayList;
 import java.util.List;

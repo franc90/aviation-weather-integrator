@@ -1,17 +1,14 @@
-package pl.edu.agh.awi.downloader.flights.zone.data.converter;
+package pl.edu.agh.awi.downloader.flights.zone.data;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
-import pl.edu.agh.awi.downloader.flights.zone.data.converter.converter.ZoneResponseConverter;
+import pl.edu.agh.awi.downloader.flights.zone.data.converter.ZoneResponseConverter;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.*;

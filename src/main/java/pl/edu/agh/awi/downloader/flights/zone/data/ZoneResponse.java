@@ -1,4 +1,4 @@
-package pl.edu.agh.awi.downloader.flights.zone.data.converter;
+package pl.edu.agh.awi.downloader.flights.zone.data;
 
 import java.util.List;
 

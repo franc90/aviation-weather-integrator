@@ -2,8 +2,8 @@ package pl.edu.agh.awi.downloader.flights.zone.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.edu.agh.awi.downloader.exceptions.MalformedUrlException;
-import pl.edu.agh.awi.downloader.flights.zone.data.converter.ZoneResponse;
-import pl.edu.agh.awi.downloader.flights.zone.data.converter.converter.ZoneResponseConverter;
+import pl.edu.agh.awi.downloader.flights.zone.data.ZoneResponse;
+import pl.edu.agh.awi.downloader.flights.zone.data.converter.ZoneResponseConverter;
 
 import java.io.IOException;
 import java.net.URL;
