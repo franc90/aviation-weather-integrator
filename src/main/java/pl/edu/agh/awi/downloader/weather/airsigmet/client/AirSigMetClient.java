@@ -2,8 +2,8 @@ package pl.edu.agh.awi.downloader.weather.airsigmet.client;
 
 import pl.edu.agh.awi.downloader.weather.AbstractClient;
 import pl.edu.agh.awi.downloader.weather.airsigmet.generated.Response;
-import pl.edu.agh.awi.downloader.weather.parameters.RequestParameters;
 import pl.edu.agh.awi.downloader.weather.parameters.RectangularRegion;
+import pl.edu.agh.awi.downloader.weather.parameters.RequestParameters;
 
 import static java.text.MessageFormat.format;
 

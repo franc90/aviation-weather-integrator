@@ -3,7 +3,7 @@ package pl.edu.agh.awi.downloader.flights.airport.client;
 import org.junit.Test;
 import pl.edu.agh.awi.downloader.flights.airport.data.AirportResponse;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 public class AirportClientTest {
 

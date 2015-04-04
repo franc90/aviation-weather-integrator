@@ -10,7 +10,7 @@ public class Airline {
 
     private final String icao;
 
-    public Airline(@JsonProperty("Name")String name, @JsonProperty("Code")String iata, @JsonProperty("ICAO")String icao) {
+    public Airline(@JsonProperty("Name") String name, @JsonProperty("Code") String iata, @JsonProperty("ICAO") String icao) {
         this.name = name;
         this.iata = iata;
         this.icao = icao;

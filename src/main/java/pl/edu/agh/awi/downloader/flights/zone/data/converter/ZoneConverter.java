@@ -1,7 +1,7 @@
 package pl.edu.agh.awi.downloader.flights.zone.data.converter;
 
 import com.google.common.collect.ImmutableList;
-import pl.edu.agh.awi.downloader.exceptions.ZoneResponseConverterException;
+import pl.edu.agh.awi.downloader.exceptions.ResponseConverterException;
 import pl.edu.agh.awi.downloader.flights.zone.data.Zone;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class ZoneConverter {
             return Double.valueOf(i);
         }
 
-        throw new ZoneResponseConverterException("Could not convert " + o);
+        throw new ResponseConverterException("Could not convert " + o);
     }
 
     private static List<Zone> convert(Map<String, Object> subZones) {

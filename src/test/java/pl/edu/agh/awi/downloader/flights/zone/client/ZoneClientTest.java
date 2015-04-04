@@ -3,7 +3,7 @@ package pl.edu.agh.awi.downloader.flights.zone.client;
 import org.junit.Test;
 import pl.edu.agh.awi.downloader.flights.zone.data.ZoneResponse;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 public class ZoneClientTest {
 

@@ -10,7 +10,7 @@ public class AirlineResponse {
 
     private final List<Airline> airlines;
 
-    public AirlineResponse(@JsonProperty("version")long version, @JsonProperty("rows")List<Airline> airlines) {
+    public AirlineResponse(@JsonProperty("version") long version, @JsonProperty("rows") List<Airline> airlines) {
         this.version = version;
         this.airlines = airlines;
     }
