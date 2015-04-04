@@ -11,7 +11,7 @@ public class StationsBuilder {
         return this;
     }
 
-    public Stations createStations() {
+    public Stations build() {
         return new Stations(stations);
     }
 }

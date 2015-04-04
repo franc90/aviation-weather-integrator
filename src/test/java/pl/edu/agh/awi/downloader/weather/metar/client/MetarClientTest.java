@@ -4,6 +4,7 @@ import org.junit.Test;
 import pl.edu.agh.awi.downloader.weather.metar.generated.Data;
 import pl.edu.agh.awi.downloader.weather.metar.generated.METAR;
 import pl.edu.agh.awi.downloader.weather.metar.generated.Response;
+import pl.edu.agh.awi.downloader.weather.parameters.RequestParameters;
 import pl.edu.agh.awi.downloader.weather.parameters.Stations;
 import pl.edu.agh.awi.downloader.weather.parameters.StationsBuilder;
 
@@ -15,12 +16,16 @@ public class MetarClientTest {
 
     @Test
     public void testDownloading() {
-        MetarClient client = new MetarClient();
-        Stations stations = new StationsBuilder().
-                addStation("EPKK")
-                .createStations();
+        RequestParameters<Stations> parameters = new RequestParameters.RequestParametersBuilder<Stations>()
+                .setValue(new StationsBuilder()
+                        .addStation("EPKK")
+                        .addStation("KJFK")
+                        .build())
+                .setHoursBeforeNow(2)
+                .build();
 
-        Response metarResponse = client.getMetarResponse(stations, 2);
+        MetarClient client = new MetarClient();
+        Response metarResponse = client.getResponse(parameters);
         assertNull(metarResponse.getErrors().getError());
 
         Data data = metarResponse.getData();

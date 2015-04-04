@@ -26,7 +26,7 @@ public class RectangularRegionBuilder {
         return this;
     }
 
-    public RectangularRegion createRectangularRegion() {
+    public RectangularRegion build() {
         return new RectangularRegion(minimalLatitude, minimalLongitude, maximalLatitude, maximalLongitude);
     }
 }

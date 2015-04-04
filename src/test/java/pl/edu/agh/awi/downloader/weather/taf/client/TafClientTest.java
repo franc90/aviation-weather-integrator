@@ -1,6 +1,7 @@
 package pl.edu.agh.awi.downloader.weather.taf.client;
 
 import org.junit.Test;
+import pl.edu.agh.awi.downloader.weather.parameters.RequestParameters;
 import pl.edu.agh.awi.downloader.weather.parameters.Stations;
 import pl.edu.agh.awi.downloader.weather.parameters.StationsBuilder;
 import pl.edu.agh.awi.downloader.weather.taf.generated.Data;
@@ -15,12 +16,15 @@ public class TafClientTest {
 
     @Test
     public void testDownloading() {
-        TafClient client = new TafClient();
-        Stations stations = new StationsBuilder().
-                addStation("EPKK")
-                .createStations();
+        RequestParameters<Stations> parameters = new RequestParameters.RequestParametersBuilder<Stations>()
+                .setValue(new StationsBuilder()
+                        .addStation("EPKK")
+                        .build())
+                .setHoursBeforeNow(2)
+                .build();
 
-        Response tafResponse = client.getTafResponse(stations, 2);
+        TafClient client = new TafClient();
+        Response tafResponse = client.getResponse(parameters);
         assertNull(tafResponse.getErrors().getError());
 
         Data data = tafResponse.getData();

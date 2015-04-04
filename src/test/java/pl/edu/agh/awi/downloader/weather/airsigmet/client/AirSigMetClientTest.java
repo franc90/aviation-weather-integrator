@@ -6,6 +6,7 @@ import pl.edu.agh.awi.downloader.weather.airsigmet.generated.Data;
 import pl.edu.agh.awi.downloader.weather.airsigmet.generated.Response;
 import pl.edu.agh.awi.downloader.weather.parameters.RectangularRegion;
 import pl.edu.agh.awi.downloader.weather.parameters.RectangularRegionBuilder;
+import pl.edu.agh.awi.downloader.weather.parameters.RequestParameters;
 
 import java.util.List;
 
@@ -15,15 +16,18 @@ public class AirSigMetClientTest {
 
     @Test
     public void testDownloading() {
-        AirSigMetClient client = new AirSigMetClient();
-        RectangularRegion region = new RectangularRegionBuilder()
-                .setMinimalLatitude(20)
-                .setMaximalLatitude(50)
-                .setMinimalLongitude(-126)
-                .setMaximalLongitude(-66)
-                .createRectangularRegion();
+        RequestParameters<RectangularRegion> parameters = new RequestParameters.RequestParametersBuilder<RectangularRegion>()
+                .setValue(new RectangularRegionBuilder()
+                        .setMinimalLatitude(20)
+                        .setMaximalLatitude(50)
+                        .setMinimalLongitude(-126)
+                        .setMaximalLongitude(-66)
+                        .build())
+                .setHoursBeforeNow(2)
+                .build();
 
-        Response airsigmetResponse = client.getAirSigMetResponse(region, 2);
+        AirSigMetClient client = new AirSigMetClient();
+        Response airsigmetResponse = client.getResponse(parameters);
         assertNull(airsigmetResponse.getErrors().getError());
 
         Data data = airsigmetResponse.getData();
