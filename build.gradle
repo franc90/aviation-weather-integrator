@@ -10,4 +10,5 @@ repositories {
 dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.5.1'
+    compile 'com.google.guava:guava:18.0'
 }
