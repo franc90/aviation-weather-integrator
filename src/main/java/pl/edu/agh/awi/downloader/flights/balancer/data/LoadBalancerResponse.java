@@ -2,11 +2,11 @@ package pl.edu.agh.awi.downloader.flights.balancer.data;
 
 import java.util.Map;
 
-public class LoadBalancerNodes {
+public class LoadBalancerResponse {
 
     private final Map<String, Integer> availableNodes;
 
-    private LoadBalancerNodes(Map<String, Integer> availableNodes) {
+    private LoadBalancerResponse(Map<String, Integer> availableNodes) {
         this.availableNodes = availableNodes;
     }
 
@@ -22,8 +22,8 @@ public class LoadBalancerNodes {
             return this;
         }
 
-        public LoadBalancerNodes build() {
-            return new LoadBalancerNodes(availableNodes);
+        public LoadBalancerResponse build() {
+            return new LoadBalancerResponse(availableNodes);
         }
     }
 

@@ -1,7 +1,7 @@
 package pl.edu.agh.awi.downloader.flights.balancer.client;
 
 import org.junit.Test;
-import pl.edu.agh.awi.downloader.flights.balancer.data.LoadBalancerNodes;
+import pl.edu.agh.awi.downloader.flights.balancer.data.LoadBalancerResponse;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ public class LoadBalancerClientTest {
     @Test
     public void testRetrievingData() {
         LoadBalancerClient client = new LoadBalancerClient();
-        LoadBalancerNodes loadBalancerNodes = client.getLoadBalancerNodes();
+        LoadBalancerResponse loadBalancerNodes = client.getLoadBalancerNodes();
 
         assertNotNull(loadBalancerNodes);
 

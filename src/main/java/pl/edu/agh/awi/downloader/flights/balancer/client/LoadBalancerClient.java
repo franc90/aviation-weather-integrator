@@ -2,7 +2,7 @@ package pl.edu.agh.awi.downloader.flights.balancer.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.edu.agh.awi.downloader.exceptions.MalformedUrlException;
-import pl.edu.agh.awi.downloader.flights.balancer.data.LoadBalancerNodes;
+import pl.edu.agh.awi.downloader.flights.balancer.data.LoadBalancerResponse;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,10 +15,10 @@ public class LoadBalancerClient {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public LoadBalancerNodes getLoadBalancerNodes() {
+    public LoadBalancerResponse getLoadBalancerNodes() {
         Map<String, Integer> balancerNodes = loadNodes();
 
-        LoadBalancerNodes loadBalancerNodes = new LoadBalancerNodes.LoadBalancerNodesBuilder()
+        LoadBalancerResponse loadBalancerNodes = new LoadBalancerResponse.LoadBalancerNodesBuilder()
                 .setAvailableNodes(balancerNodes)
                 .build();
 
