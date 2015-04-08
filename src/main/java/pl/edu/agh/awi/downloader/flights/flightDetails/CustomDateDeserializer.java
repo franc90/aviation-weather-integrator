@@ -7,17 +7,17 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Optional;
 
 public class CustomDateDeserializer extends JsonDeserializer<Date> {
     @Override
-    public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        String text = p.getText();
-        if (text == null || text.isEmpty()) {
-            return null;
-        }
+    public Date deserialize(JsonParser parser, DeserializationContext context) throws IOException, JsonProcessingException {
+        Optional<String> text = Optional.ofNullable(parser.getText());
 
-        Long value = Long.valueOf(text);
-        long milliseconds = value * 1000L;
-        return new Date(milliseconds);
+        return text.map(time -> {
+            long seconds = Long.valueOf(time);
+            long milliseconds = seconds * 1000L;
+            return new Date(milliseconds);
+        }).orElse(null);
     }
 }

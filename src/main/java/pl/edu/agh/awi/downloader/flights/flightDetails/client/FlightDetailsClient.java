@@ -1,26 +1,39 @@
 package pl.edu.agh.awi.downloader.flights.flightDetails.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import pl.edu.agh.awi.downloader.exceptions.JsonTreeReadingException;
+import pl.edu.agh.awi.downloader.flights.AbstractFlightsClient;
 import pl.edu.agh.awi.downloader.flights.flightDetails.data.FlightDetailsResponse;
-
-import java.io.IOException;
-import java.net.URL;
 
 import static java.text.MessageFormat.format;
 
-public class FlightDetailsClient {
+public class FlightDetailsClient extends AbstractFlightsClient<FlightDetailsResponse, FlightDetailsResponse> {
 
-    public static final String URL = "http://{0}/_external/planedata_json.1.4.php?f={1}";
+    private static final String URL = "http://{0}/_external/planedata_json.1.4.php?f={1}";
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private String loadBalancer;
 
-    public FlightDetailsResponse getFlightDetails(String loadBalancer, String flightId) {
-        String formattedUrl = format(URL, loadBalancer, flightId);
-        try {
-            return objectMapper.readValue(new URL(formattedUrl), FlightDetailsResponse.class);
-        } catch (IOException e) {
-            throw new JsonTreeReadingException("Could not read flight details for " + flightId, e);
-        }
+    private String flightId;
+
+    public FlightDetailsClient() {
+        super(FlightDetailsResponse.class);
+    }
+
+    public FlightDetailsClient withLoadBalancer(String loadBalancer) {
+        this.loadBalancer = loadBalancer;
+        return this;
+    }
+
+    public FlightDetailsClient withFlightId(String flightId) {
+        this.flightId = flightId;
+        return this;
+    }
+
+    @Override
+    public FlightDetailsResponse getResponse() {
+        return load();
+    }
+
+    @Override
+    protected String getUrl() {
+        return format(URL, loadBalancer, flightId);
     }
 }

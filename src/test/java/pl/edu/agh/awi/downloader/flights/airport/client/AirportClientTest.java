@@ -10,7 +10,7 @@ public class AirportClientTest {
     @Test
     public void testDownloading() {
         AirportClient client = new AirportClient();
-        AirportResponse airports = client.getAirports();
+        AirportResponse airports = client.getResponse();
 
         assertNotNull(airports);
         assertNotNull(airports.getAirports());

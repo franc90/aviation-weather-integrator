@@ -14,7 +14,10 @@ public class FlightClientTest {
     @Test
     public void downloadTest() {
         FlightClient client = new FlightClient();
-        FlightResponse flights = client.getFlights(LOAD_BALANCER, ZONE);
+        FlightResponse flights = client
+                .withLoadBalancer(LOAD_BALANCER)
+                .withZone(ZONE)
+                .getResponse();
 
         assertNotNull(flights);
         assertNotNull(flights.getFlights());

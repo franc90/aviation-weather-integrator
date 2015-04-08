@@ -10,7 +10,7 @@ public class ZoneClientTest {
     @Test
     public void downloadTest() {
         ZoneClient client = new ZoneClient();
-        ZoneResponse zones = client.getZones();
+        ZoneResponse zones = client.getResponse();
 
         assertNotNull(zones);
         assertNotNull(zones.getZones());

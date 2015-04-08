@@ -13,7 +13,7 @@ public class LoadBalancerClientTest {
     @Test
     public void testRetrievingData() {
         LoadBalancerClient client = new LoadBalancerClient();
-        LoadBalancerResponse loadBalancerNodes = client.getLoadBalancerNodes();
+        LoadBalancerResponse loadBalancerNodes = client.getResponse();
 
         assertNotNull(loadBalancerNodes);
 

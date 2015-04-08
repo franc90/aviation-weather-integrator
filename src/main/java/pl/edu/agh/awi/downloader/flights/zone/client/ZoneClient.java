@@ -1,34 +1,32 @@
 package pl.edu.agh.awi.downloader.flights.zone.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import pl.edu.agh.awi.downloader.exceptions.MalformedUrlException;
+import pl.edu.agh.awi.downloader.flights.AbstractFlightsClient;
 import pl.edu.agh.awi.downloader.flights.zone.data.ZoneResponse;
 import pl.edu.agh.awi.downloader.flights.zone.data.converter.ZoneResponseConverter;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ZoneClient {
+public class ZoneClient extends AbstractFlightsClient<ZoneResponse, HashMap<String, Object>> {
 
-    public static final String URL = "http://www.flightradar24.com/js/zones.js.php";
+    private static final String URL = "http://www.flightradar24.com/js/zones.js.php";
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private static Class<HashMap<String, Object>> clazz = (Class<HashMap<String, Object>>) new HashMap<String, Object>().getClass();
 
-    public ZoneResponse getZones() {
-        Map<String, Object> zones = loadNodes();
+    public ZoneClient() {
+        super(clazz);
+    }
+
+    @Override
+    public ZoneResponse getResponse() {
+        Map<String, Object> zones = load();
         ZoneResponse zoneResponse = ZoneResponseConverter.convert(zones);
 
         return zoneResponse;
     }
 
-    private Map<String, Object> loadNodes() {
-        try {
-            return objectMapper.readValue(new URL(URL), HashMap.class);
-        } catch (IOException e) {
-            throw new MalformedUrlException("Error while getting zones", e);
-        }
+    @Override
+    protected String getUrl() {
+        return URL;
     }
-
 }

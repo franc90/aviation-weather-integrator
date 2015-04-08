@@ -1,22 +1,25 @@
 package pl.edu.agh.awi.downloader.flights.balancer.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import pl.edu.agh.awi.downloader.exceptions.MalformedUrlException;
+import pl.edu.agh.awi.downloader.flights.AbstractFlightsClient;
 import pl.edu.agh.awi.downloader.flights.balancer.data.LoadBalancerResponse;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoadBalancerClient {
+public class LoadBalancerClient extends AbstractFlightsClient<LoadBalancerResponse, HashMap<String, Integer>> {
 
-    public static final String URL = "http://www.flightradar24.com/balance.json";
+    private static final String URL = "http://www.flightradar24.com/balance.json";
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private static Class<HashMap<String, Integer>> clazz = (Class<HashMap<String, Integer>>) new HashMap<String, Integer>().getClass();
 
-    public LoadBalancerResponse getLoadBalancerNodes() {
-        Map<String, Integer> balancerNodes = loadNodes();
+    public LoadBalancerClient() {
+        super(clazz);
+    }
+
+
+    @Override
+    public LoadBalancerResponse getResponse() {
+        Map<String, Integer> balancerNodes = load();
 
         LoadBalancerResponse loadBalancerNodes = new LoadBalancerResponse.LoadBalancerNodesBuilder()
                 .setAvailableNodes(balancerNodes)
@@ -25,12 +28,8 @@ public class LoadBalancerClient {
         return loadBalancerNodes;
     }
 
-    private Map<String, Integer> loadNodes() {
-        try {
-            return objectMapper.readValue(new URL(URL), HashMap.class);
-        } catch (IOException e) {
-            throw new MalformedUrlException("Error while getting load balancer nodes", e);
-        }
+    @Override
+    protected String getUrl() {
+        return URL;
     }
-
 }

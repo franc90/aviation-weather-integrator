@@ -7,11 +7,11 @@ import javax.xml.bind.JAXB;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public abstract class AbstractClient<T, U> {
+public abstract class AbstractWeatherClient<T, U> {
 
     private Class<T> responseType;
 
-    public AbstractClient(Class<T> responseType) {
+    public AbstractWeatherClient(Class<T> responseType) {
         this.responseType = responseType;
     }
 

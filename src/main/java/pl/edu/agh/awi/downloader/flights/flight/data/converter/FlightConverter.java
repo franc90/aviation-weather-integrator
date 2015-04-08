@@ -8,8 +8,10 @@ import java.util.List;
 
 public class FlightConverter {
 
+    public static final int PARAMS_NUMBER = 18;
+
     public static Flight convert(String key, List<Object> value) {
-        if (value == null || value.size() != 18) {
+        if (value == null || value.size() != PARAMS_NUMBER) {
             throw new ResponseConverterException("Could not parse flight: " + key);
         }
 

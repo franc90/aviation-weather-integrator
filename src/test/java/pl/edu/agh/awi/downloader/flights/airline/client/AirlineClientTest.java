@@ -10,7 +10,7 @@ public class AirlineClientTest {
     @Test
     public void downloadTest() {
         AirlineClient client = new AirlineClient();
-        AirlineResponse airlineResponse = client.getAirlines();
+        AirlineResponse airlineResponse = client.getResponse();
 
         assertNotNull(airlineResponse);
         assertNotNull(airlineResponse.getAirlines());
