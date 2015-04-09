@@ -11,12 +11,12 @@ import pl.edu.agh.awi.persistence.PersistenceConfig;
 import pl.edu.agh.awi.persistence.TestDatabaseConfig;
 import pl.edu.agh.awi.persistence.model.AirPort;
 import pl.edu.agh.awi.persistence.model.Metar;
-import pl.edu.agh.awi.persistence.model.Taf;
-import pl.edu.agh.awi.persistence.model.WeatherInfo;
+import pl.edu.agh.awi.persistence.model.ModelBuilder;
 
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistenceConfig.class, TestDatabaseConfig.class})
@@ -24,8 +24,6 @@ import static org.junit.Assert.*;
 public class AirPortRepositoryTest {
 
     private static final String AIR_PORT_NAME = "airport1";
-    private static final String TAF_INFO = "tafInfo";
-    private static final String METAR_INFO = "metarInfo";
 
     @Autowired
     private AirPortRepository airPortRepository;
@@ -41,39 +39,29 @@ public class AirPortRepositoryTest {
     }
 
     private AirPort createAirport() {
-        AirPort airPort = new AirPort();
-        airPort.setName(AIR_PORT_NAME);
-        Taf taf = new Taf();
-        taf.setTafInfo(TAF_INFO);
-        Metar metar = new Metar();
-        metar.setMetarInfo(METAR_INFO);
-        WeatherInfo info = new WeatherInfo();
-        info.addTaf(taf);
-        info.addMetar(metar);
-        airPort.addWeatherInfo(info);
-        return airPort;
+        return ModelBuilder.build(AirPort::new, a -> {
+            a.setName(AIR_PORT_NAME);
+            a.setCity("city");
+            a.setCountry("country");
+            a.setIataCode("iata");
+            a.setIcaoCode("icaou");
+            a.setLatitude(Double.valueOf("13.3"));
+            a.setLongitude(Double.valueOf("45"));
+            a.setNumberOfRunways(13);
+            a.addMetar(new Metar());
+        });
     }
 
     private void assertAirportRelations(AirPort airPort) {
-        Set<WeatherInfo> weatherInfo = airPort.getWeatherInfo();
+        Set<Metar> weatherInfo = airPort.getMetars();
         assertFalse(weatherInfo.isEmpty());
         assertWeatherInfoRelations(weatherInfo.iterator().next());
     }
 
-    private void assertWeatherInfoRelations(WeatherInfo weatherInfo) {
-        Set<Taf> taf = weatherInfo.getTaf();
-        Set<Metar> metar = weatherInfo.getMetar();
-        assertFalse(taf.isEmpty());
-        assertFalse(metar.isEmpty());
-        assertTaf(taf.iterator().next());
-        assertMetar(metar.iterator().next());
+    private void assertWeatherInfoRelations(Metar weatherInfo) {
+        assertNotNull(weatherInfo);
+        assertNotNull(weatherInfo.getTimeStamp());
     }
 
-    private void assertTaf(Taf taf) {
-        assertEquals(TAF_INFO, taf.getTafInfo());
-    }
 
-    private void assertMetar(Metar metar) {
-        assertEquals(METAR_INFO, metar.getMetarInfo());
-    }
 }

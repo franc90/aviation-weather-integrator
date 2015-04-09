@@ -4,6 +4,8 @@ import com.google.common.collect.Sets;
 import org.springframework.data.neo4j.annotation.*;
 
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 @NodeEntity
 public class AirPort {
@@ -14,9 +16,23 @@ public class AirPort {
     @Indexed(unique = true)
     private String name;
 
-    @RelatedTo(type = "weather_infos")
+    private String city;
+
+    private String country;
+
+    private Integer numberOfRunways;
+
+    private Double longitude;
+
+    private Double latitude;
+
+    private String iataCode;
+
+    private String icaoCode;
+
+    @RelatedTo(type = "metars")
     @Fetch
-    private Set<WeatherInfo> weatherInfo = Sets.newHashSet();
+    private Set<Metar> metars = Sets.newHashSet();
 
     public String getName() {
         return name;
@@ -26,13 +42,70 @@ public class AirPort {
         this.name = name;
     }
 
-    public Set<WeatherInfo> getWeatherInfo() {
-        return weatherInfo;
+    public String getCity() {
+        return city;
     }
 
-    public void addWeatherInfo(WeatherInfo info) {
-        weatherInfo.add(info);
+    public void setCity(String city) {
+        this.city = city;
     }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Integer getNumberOfRunways() {
+        return numberOfRunways;
+    }
+
+    public void setNumberOfRunways(Integer numberOfRunways) {
+        this.numberOfRunways = numberOfRunways;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getIataCode() {
+        return iataCode;
+    }
+
+    public void setIataCode(String iataCode) {
+        this.iataCode = iataCode;
+    }
+
+    public String getIcaoCode() {
+        return icaoCode;
+    }
+
+    public void setIcaoCode(String icaoCode) {
+        this.icaoCode = icaoCode;
+    }
+
+    public Set<Metar> getMetars() {
+        return metars;
+    }
+
+    public void addMetar(Metar metar) {
+        metars.add(metar);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
