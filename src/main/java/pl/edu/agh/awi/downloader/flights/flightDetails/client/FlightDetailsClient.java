@@ -1,10 +1,12 @@
 package pl.edu.agh.awi.downloader.flights.flightDetails.client;
 
+import org.springframework.stereotype.Component;
 import pl.edu.agh.awi.downloader.flights.AbstractFlightsClient;
 import pl.edu.agh.awi.downloader.flights.flightDetails.data.FlightDetailsResponse;
 
 import static java.text.MessageFormat.format;
 
+@Component
 public class FlightDetailsClient extends AbstractFlightsClient<FlightDetailsResponse, FlightDetailsResponse> {
 
     private static final String URL = "http://{0}/_external/planedata_json.1.4.php?f={1}";

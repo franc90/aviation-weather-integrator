@@ -1,11 +1,13 @@
 package pl.edu.agh.awi.downloader.flights.balancer.client;
 
+import org.springframework.stereotype.Component;
 import pl.edu.agh.awi.downloader.flights.AbstractFlightsClient;
 import pl.edu.agh.awi.downloader.flights.balancer.data.LoadBalancerResponse;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class LoadBalancerClient extends AbstractFlightsClient<LoadBalancerResponse, HashMap<String, Integer>> {
 
     private static final String URL = "http://www.flightradar24.com/balance.json";

@@ -1,5 +1,6 @@
 package pl.edu.agh.awi.downloader.flights.zone.client;
 
+import org.springframework.stereotype.Component;
 import pl.edu.agh.awi.downloader.flights.AbstractFlightsClient;
 import pl.edu.agh.awi.downloader.flights.zone.data.ZoneResponse;
 import pl.edu.agh.awi.downloader.flights.zone.data.converter.ZoneResponseConverter;
@@ -7,6 +8,7 @@ import pl.edu.agh.awi.downloader.flights.zone.data.converter.ZoneResponseConvert
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class ZoneClient extends AbstractFlightsClient<ZoneResponse, HashMap<String, Object>> {
 
     private static final String URL = "http://www.flightradar24.com/js/zones.js.php";

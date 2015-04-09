@@ -1,7 +1,22 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'spring-boot'
 
 sourceCompatibility = 1.8
-version = '0.1'
+mainClassName = 'pl.edu.agh.awi.Application'
+
+jar {
+    baseName = 'aviation-weather-integrator'
+    version = '0.1'
+}
 
 repositories {
     mavenCentral()
@@ -11,4 +26,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.5.1'
     compile 'com.google.guava:guava:18.0'
+    compile 'org.springframework.boot:spring-boot-starter'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
 }
