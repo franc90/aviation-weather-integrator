@@ -1,17 +1,16 @@
 package pl.edu.agh.awi.persistence.model;
 
-
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 @NodeEntity
-public class Metar extends AbstractForecast {
+public class Taf extends AbstractForecast {
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Metar metar = (Metar) o;
+        Taf metar = (Taf) o;
 
         return !(id != null ? !id.equals(metar.id) : metar.id != null);
 

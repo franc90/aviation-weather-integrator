@@ -1,11 +1,13 @@
 package pl.edu.agh.awi.persistence.model;
 
 import com.google.common.collect.Sets;
-import org.springframework.data.neo4j.annotation.*;
+import org.neo4j.graphdb.Direction;
+import org.springframework.data.neo4j.annotation.GraphId;
+import org.springframework.data.neo4j.annotation.Indexed;
+import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 @NodeEntity
 public class AirPort {
@@ -31,8 +33,19 @@ public class AirPort {
     private String icaoCode;
 
     @RelatedTo(type = "metars")
-    @Fetch
     private Set<Metar> metars = Sets.newHashSet();
+
+    @RelatedTo(type = "tafs")
+    private Set<Taf> tafs = Sets.newHashSet();
+
+    @RelatedTo(type = "airsigments")
+    private Set<AirSigment> airSigments = Sets.newHashSet();
+
+    @RelatedTo(type = "from")
+    private Set<Flight> outgoingFlights = Sets.newHashSet();
+
+    @RelatedTo(type = "to", direction = Direction.INCOMING)
+    private Set<Flight> incomingFlights = Sets.newHashSet();
 
     public String getName() {
         return name;
@@ -102,8 +115,32 @@ public class AirPort {
         return metars;
     }
 
+    public Set<Taf> getTafs() {
+        return tafs;
+    }
+
+    public Set<AirSigment> getAirSigments() {
+        return airSigments;
+    }
+
+    public Set<Flight> getOutgoingFlights() {
+        return outgoingFlights;
+    }
+
+    public Set<Flight> getIncomingFlights() {
+        return incomingFlights;
+    }
+
     public void addMetar(Metar metar) {
         metars.add(metar);
+    }
+
+    public void addTaf(Taf taf) {
+        tafs.add(taf);
+    }
+
+    public void addAirSigment(AirSigment airSigment) {
+        airSigments.add(airSigment);
     }
 
     @Override
