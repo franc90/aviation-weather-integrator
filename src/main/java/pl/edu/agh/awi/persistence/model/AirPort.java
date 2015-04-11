@@ -2,14 +2,13 @@ package pl.edu.agh.awi.persistence.model;
 
 import com.google.common.collect.Sets;
 import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.GraphId;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.springframework.data.neo4j.annotation.*;
 import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
 import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
 import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
+import pl.edu.agh.awi.persistence.model.weather_condition.AbstractWeatherCondition;
 
+import java.util.Date;
 import java.util.Set;
 
 @NodeEntity
@@ -35,13 +34,13 @@ public class AirPort {
 
     private String icaoCode;
 
-    @RelatedTo(type = "metars")
+    @RelatedTo(type = "metar")
     private Set<Metar> metars = Sets.newHashSet();
 
-    @RelatedTo(type = "tafs")
+    @RelatedTo(type = "taf")
     private Set<Taf> tafs = Sets.newHashSet();
 
-    @RelatedTo(type = "airsigments")
+    @RelatedTo(type = "airsigment")
     private Set<AirSigmet> airSigmets = Sets.newHashSet();
 
     @RelatedTo(type = "from")

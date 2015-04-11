@@ -23,7 +23,7 @@ public class TestDatabaseConfig extends DatabaseConfig {
 
     @Override
     @Bean
-    GraphDatabaseService graphDatabaseService() {
+    public GraphDatabaseService graphDatabaseService() {
         return new GraphDatabaseFactory().newEmbeddedDatabase(TEST_DB);
     }
 

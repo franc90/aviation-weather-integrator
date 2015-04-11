@@ -10,7 +10,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.awi.persistence.PersistenceConfig;
 import pl.edu.agh.awi.persistence.TestDatabaseConfig;
-import pl.edu.agh.awi.persistence.model.*;
+import pl.edu.agh.awi.persistence.model.AirPort;
+import pl.edu.agh.awi.persistence.model.ModelBuilder;
 import pl.edu.agh.awi.persistence.model.weather_condition.AbstractWeatherCondition;
 import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
 import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
@@ -20,9 +21,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {PersistenceConfig.class, TestDatabaseConfig.class})
@@ -30,7 +29,11 @@ import static org.junit.Assert.assertTrue;
 public class AirPortRepositoryTest {
 
     private static final String AIR_PORT_NAME = "airport1";
+    private static final String METAR = "METAR" ;
+    private static final String TAF = "TAF" ;
     private static final Date TIMESTAMP = new Date();
+    private static final Date VALID_FROM = new Date();
+    private static final Date VALID_TO =  new Date();
 
     @Autowired
     private AirPortRepository airPortRepository;
@@ -44,21 +47,18 @@ public class AirPortRepositoryTest {
         AirPort airPort = createAirport();
         airPortRepository.save(airPort);
         AirPort airPortFromDB = airPortRepository.findBySchemaPropertyValue("name", AIR_PORT_NAME);
-        neo4jTemplate.fetch(airPortFromDB);
+        neo4jTemplate.fetch(airPortFromDB.getMetars());
+        neo4jTemplate.fetch(airPortFromDB.getTafs());
+        neo4jTemplate.fetch(airPortFromDB.getAirSigmets());
         assertNotNull(airPortFromDB);
         assertEquals(AIR_PORT_NAME, airPortFromDB.getName());
         assertAirportRelations(airPortFromDB);
     }
 
     private AirPort createAirport() {
-        Metar metar = new Metar();
-        metar.setTimestamp(TIMESTAMP);
-
-        Taf taf = new Taf();
-        taf.setTimestamp(TIMESTAMP);
-
-        AirSigmet airSigmet = new AirSigmet();
-        airSigmet.setTimestamp(TIMESTAMP);
+        Metar metar = createMetar();
+        Taf taf = createTaf();
+        AirSigmet airSigmet = createAirSigmet();
 
         return ModelBuilder.build(AirPort::new, a -> {
             a.setName(AIR_PORT_NAME);
@@ -69,10 +69,30 @@ public class AirPortRepositoryTest {
             a.setLatitude(Double.valueOf("13.3"));
             a.setLongitude(Double.valueOf("45"));
             a.setNumberOfRunways(13);
-            a.addMetar(metar);
             a.addTaf(taf);
+            a.addMetar(metar);
             a.addAirSigment(airSigmet);
         });
+    }
+
+    private Metar createMetar() {
+        Metar metar = new Metar();
+        metar.setInfoType(METAR);
+        return metar;
+    }
+
+    private Taf createTaf() {
+        Taf taf = new Taf();
+        taf.setInfoType(TAF);
+        taf.setValidFrom(VALID_FROM);
+        taf.setValidTo(VALID_TO);
+        return taf;
+    }
+
+    private AirSigmet createAirSigmet() {
+        AirSigmet airSigmet = new AirSigmet();
+        airSigmet.setTimestamp(TIMESTAMP);
+        return airSigmet;
     }
 
     private void assertAirportRelations(AirPort airPort) {
@@ -81,25 +101,31 @@ public class AirPortRepositoryTest {
         Set<Taf> tafs = airPort.getTafs();
         Set<AirSigmet> airSigmets = airPort.getAirSigmets();
         assertSize(expectedSize, metars, tafs, airSigmets);
-        assertTimestamp(metars, tafs);
+        assertWeatherCondition(metars, METAR);
+        assertWeatherCondition(tafs, TAF);
+        assertTafs(tafs);
         assertTimestamp(airSigmets);
     }
+
 
     private void assertSize(int expectedSize, Set<?>... sets) {
         Stream.of(sets)
                 .forEach(set -> assertTrue(set.size() == expectedSize));
     }
 
-    @SafeVarargs
-    private final void assertTimestamp(Set<? extends AbstractWeatherCondition>... sets) {
-        Stream.of(sets)
-                .forEach(set -> set.stream()
-                        .allMatch(forecast -> TIMESTAMP.equals(forecast.getTimestamp())));
+    private void assertTafs(Set<Taf> tafs) {
+        assertTrue(tafs.stream()
+                .allMatch(taf -> VALID_FROM.equals(taf.getValidFrom()) && VALID_TO.equals(taf.getValidTo())));
+    }
+
+    private void assertWeatherCondition(Set<? extends AbstractWeatherCondition> weatherConditions, String expectedType) {
+        assertTrue(weatherConditions.stream()
+                .allMatch(cond -> expectedType.equals(cond.getInfoType())));
     }
 
      private  void assertTimestamp(Set<AirSigmet> set) {
-       set.stream()
-               .allMatch(forecast -> TIMESTAMP.equals(forecast.getTimestamp()));
+       assertTrue(set.stream()
+               .allMatch(forecast -> TIMESTAMP.equals(forecast.getTimestamp())));
     }
 
 }

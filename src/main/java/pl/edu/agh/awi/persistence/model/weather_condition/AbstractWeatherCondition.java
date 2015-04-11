@@ -1,18 +1,13 @@
 package pl.edu.agh.awi.persistence.model.weather_condition;
 
 import com.google.common.collect.Sets;
-import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
-import java.util.Date;
 import java.util.Set;
 
 
 public abstract class AbstractWeatherCondition {
 
-    @GraphId
-    protected Long id;
-    private Date timestamp = new Date();
     private Double temperature;
     private Double pressure;
     private Double dewPointTemperature;
@@ -33,14 +28,6 @@ public abstract class AbstractWeatherCondition {
 
     @RelatedTo(type = "icing_condition")
     private Set<IcingCondition> icingConditions = Sets.newHashSet();
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
-    }
 
     public Double getTemperature() {
         return temperature;
@@ -153,4 +140,9 @@ public abstract class AbstractWeatherCondition {
     public void addIcingCondition(IcingCondition icingCondition) {
         icingConditions.add(icingCondition);
     }
+
+    public interface WeatherConditionFunction<T> {
+        T withWeatherCondition(AbstractWeatherCondition condition);
+    }
+
 }

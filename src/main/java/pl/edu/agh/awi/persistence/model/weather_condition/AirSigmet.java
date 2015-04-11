@@ -1,7 +1,9 @@
 package pl.edu.agh.awi.persistence.model.weather_condition;
 
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Date;
 
@@ -18,7 +20,12 @@ public class AirSigmet {
     private Double maxAltitude;
     private String movementDirection;
     private Double movementSpeed;
-    private String hazard;
+
+    @RelatedTo(type ="hazard")
+    @Fetch
+    private Hazard hazard;
+
+    private AirSigmetType type;
 
     public Date getTimestamp() {
         return timestamp;
@@ -76,12 +83,20 @@ public class AirSigmet {
         this.movementSpeed = movementSpeed;
     }
 
-    public String getHazard() {
+    public Hazard getHazard() {
         return hazard;
     }
 
-    public void setHazard(String hazard) {
+    public void setHazard(Hazard hazard) {
         this.hazard = hazard;
+    }
+
+    public AirSigmetType getType() {
+        return type;
+    }
+
+    public void setType(AirSigmetType type) {
+        this.type = type;
     }
 
     @Override
