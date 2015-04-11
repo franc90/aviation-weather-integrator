@@ -1,4 +1,4 @@
-package pl.edu.agh.awi.persistence.model;
+package pl.edu.agh.awi.persistence.model.weather_condition;
 
 import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -6,7 +6,7 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import java.util.Date;
 
 @NodeEntity
-public class AirSigment {
+public class AirSigmet {
 
     @GraphId
     private Long id;
@@ -19,7 +19,6 @@ public class AirSigment {
     private String movementDirection;
     private Double movementSpeed;
     private String hazard;
-    private String area;
 
     public Date getTimestamp() {
         return timestamp;
@@ -85,20 +84,12 @@ public class AirSigment {
         this.hazard = hazard;
     }
 
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AirSigment that = (AirSigment) o;
+        AirSigmet that = (AirSigmet) o;
 
         return !(id != null ? !id.equals(that.id) : that.id != null);
 

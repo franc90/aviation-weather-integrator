@@ -6,6 +6,9 @@ import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
+import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
+import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
+import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
 
 import java.util.Set;
 
@@ -39,7 +42,7 @@ public class AirPort {
     private Set<Taf> tafs = Sets.newHashSet();
 
     @RelatedTo(type = "airsigments")
-    private Set<AirSigment> airSigments = Sets.newHashSet();
+    private Set<AirSigmet> airSigmets = Sets.newHashSet();
 
     @RelatedTo(type = "from")
     private Set<Flight> outgoingFlights = Sets.newHashSet();
@@ -119,8 +122,8 @@ public class AirPort {
         return tafs;
     }
 
-    public Set<AirSigment> getAirSigments() {
-        return airSigments;
+    public Set<AirSigmet> getAirSigmets() {
+        return airSigmets;
     }
 
     public Set<Flight> getOutgoingFlights() {
@@ -139,8 +142,8 @@ public class AirPort {
         tafs.add(taf);
     }
 
-    public void addAirSigment(AirSigment airSigment) {
-        airSigments.add(airSigment);
+    public void addAirSigment(AirSigmet airSigmet) {
+        airSigmets.add(airSigmet);
     }
 
     @Override

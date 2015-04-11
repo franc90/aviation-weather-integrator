@@ -11,6 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.awi.persistence.PersistenceConfig;
 import pl.edu.agh.awi.persistence.TestDatabaseConfig;
 import pl.edu.agh.awi.persistence.model.*;
+import pl.edu.agh.awi.persistence.model.weather_condition.AbstractWeatherCondition;
+import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
+import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
+import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
 
 import java.util.Date;
 import java.util.Set;
@@ -53,8 +57,8 @@ public class AirPortRepositoryTest {
         Taf taf = new Taf();
         taf.setTimestamp(TIMESTAMP);
 
-        AirSigment airSigment = new AirSigment();
-        airSigment.setTimestamp(TIMESTAMP);
+        AirSigmet airSigmet = new AirSigmet();
+        airSigmet.setTimestamp(TIMESTAMP);
 
         return ModelBuilder.build(AirPort::new, a -> {
             a.setName(AIR_PORT_NAME);
@@ -67,7 +71,7 @@ public class AirPortRepositoryTest {
             a.setNumberOfRunways(13);
             a.addMetar(metar);
             a.addTaf(taf);
-            a.addAirSigment(airSigment);
+            a.addAirSigment(airSigmet);
         });
     }
 
@@ -75,10 +79,10 @@ public class AirPortRepositoryTest {
         int expectedSize = 1;
         Set<Metar> metars = airPort.getMetars();
         Set<Taf> tafs = airPort.getTafs();
-        Set<AirSigment> airSigments = airPort.getAirSigments();
-        assertSize(expectedSize, metars, tafs, airSigments);
+        Set<AirSigmet> airSigmets = airPort.getAirSigmets();
+        assertSize(expectedSize, metars, tafs, airSigmets);
         assertTimestamp(metars, tafs);
-        assertTimestamp(airSigments);
+        assertTimestamp(airSigmets);
     }
 
     private void assertSize(int expectedSize, Set<?>... sets) {
@@ -87,13 +91,13 @@ public class AirPortRepositoryTest {
     }
 
     @SafeVarargs
-    private final void assertTimestamp(Set<? extends AbstractForecast>... sets) {
+    private final void assertTimestamp(Set<? extends AbstractWeatherCondition>... sets) {
         Stream.of(sets)
                 .forEach(set -> set.stream()
                         .allMatch(forecast -> TIMESTAMP.equals(forecast.getTimestamp())));
     }
 
-     private  void assertTimestamp(Set<AirSigment> set) {
+     private  void assertTimestamp(Set<AirSigmet> set) {
        set.stream()
                .allMatch(forecast -> TIMESTAMP.equals(forecast.getTimestamp()));
     }

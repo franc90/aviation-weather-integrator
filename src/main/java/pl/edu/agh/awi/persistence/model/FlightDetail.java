@@ -13,6 +13,7 @@ public class FlightDetail {
     private Date timestamp = new Date();
     private Double longitude;
     private Double altitude;
+    private Double latitude;
     private Double speed;
     private Date estimatedArrivalTime;
 
@@ -46,6 +47,14 @@ public class FlightDetail {
 
     public void setSpeed(Double speed) {
         this.speed = speed;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
 
     public Date getEstimatedArrivalTime() {

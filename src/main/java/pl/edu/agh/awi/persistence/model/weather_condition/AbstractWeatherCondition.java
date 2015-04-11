@@ -1,28 +1,38 @@
-package pl.edu.agh.awi.persistence.model;
+package pl.edu.agh.awi.persistence.model.weather_condition;
 
+import com.google.common.collect.Sets;
 import org.springframework.data.neo4j.annotation.GraphId;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Date;
+import java.util.Set;
 
 
-public abstract class AbstractForecast {
+public abstract class AbstractWeatherCondition {
 
     @GraphId
     protected Long id;
     private Date timestamp = new Date();
     private Double temperature;
     private Double pressure;
-    private String visibility;
     private Double dewPointTemperature;
     private Double windSpeed;
-    private Double windForce;
+    private Double windGust;
     private String windDirection;
-    private String cloudbase;
     private Double cloudHeight;
     private String percipation;
-    private String skyCondition;
-    private String turbulenceInfo;
     private String infoType;
+    private Double visibilityStatute;
+    private Integer verticalVisibility;
+
+    @RelatedTo(type = "sky_condition")
+    private Set<SkyCondition> skyConditions = Sets.newHashSet();
+
+    @RelatedTo(type = "turbulence_condition")
+    private Set<TurbulenceCondition> turbulenceConditions = Sets.newHashSet();
+
+    @RelatedTo(type = "icing_condition")
+    private Set<IcingCondition> icingConditions = Sets.newHashSet();
 
     public Date getTimestamp() {
         return timestamp;
@@ -48,14 +58,6 @@ public abstract class AbstractForecast {
         this.pressure = pressure;
     }
 
-    public String getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
-    }
-
     public Double getDewPointTemperature() {
         return dewPointTemperature;
     }
@@ -72,20 +74,12 @@ public abstract class AbstractForecast {
         this.windSpeed = windSpeed;
     }
 
-    public Double getWindForce() {
-        return windForce;
+    public Double getWindGust() {
+        return windGust;
     }
 
-    public void setWindForce(Double windForce) {
-        this.windForce = windForce;
-    }
-
-    public String getCloudbase() {
-        return cloudbase;
-    }
-
-    public void setCloudbase(String cloudbase) {
-        this.cloudbase = cloudbase;
+    public void setWindGust(Double windGust) {
+        this.windGust = windGust;
     }
 
     public String getPercipation() {
@@ -94,14 +88,6 @@ public abstract class AbstractForecast {
 
     public void setPercipation(String percipation) {
         this.percipation = percipation;
-    }
-
-    public String getSkyCondition() {
-        return skyCondition;
-    }
-
-    public void setSkyCondition(String skyCondition) {
-        this.skyCondition = skyCondition;
     }
 
     public String getWindDirection() {
@@ -120,19 +106,51 @@ public abstract class AbstractForecast {
         this.cloudHeight = cloudHeight;
     }
 
-    public String getTurbulenceInfo() {
-        return turbulenceInfo;
-    }
-
-    public void setTurbulenceInfo(String turbulenceInfo) {
-        this.turbulenceInfo = turbulenceInfo;
-    }
-
     public String getInfoType() {
         return infoType;
     }
 
     public void setInfoType(String infoType) {
         this.infoType = infoType;
+    }
+
+    public Double getVisibilityStatute() {
+        return visibilityStatute;
+    }
+
+    public void setVisibilityStatute(Double visibilityStatute) {
+        this.visibilityStatute = visibilityStatute;
+    }
+
+    public Integer getVerticalVisibility() {
+        return verticalVisibility;
+    }
+
+    public void setVerticalVisibility(Integer verticalVisibility) {
+        this.verticalVisibility = verticalVisibility;
+    }
+
+    public Set<SkyCondition> getSkyConditions() {
+        return skyConditions;
+    }
+
+    public void addSkyCondition(SkyCondition skyCondition) {
+        skyConditions.add(skyCondition);
+    }
+
+    public Set<TurbulenceCondition> getTurbulenceConditions() {
+        return turbulenceConditions;
+    }
+
+    public void addTurbulenceCondition(TurbulenceCondition turbulenceCondition) {
+        turbulenceConditions.add(turbulenceCondition);
+    }
+
+    public Set<IcingCondition> getIcingConditions() {
+        return icingConditions;
+    }
+
+    public void addIcingCondition(IcingCondition icingCondition) {
+        icingConditions.add(icingCondition);
     }
 }

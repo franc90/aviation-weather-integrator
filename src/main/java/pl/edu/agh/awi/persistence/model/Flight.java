@@ -15,7 +15,7 @@ public class Flight {
 
     @Indexed(unique = true)
     private Long flightId;
-    private FlightStatus status;
+    private String status;
     private String aircraft;
     private Date scheduledDepartureTime;
     private Date actualDepartureTime;
@@ -42,11 +42,11 @@ public class Flight {
         this.flightId = flightId;
     }
 
-    public FlightStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(FlightStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
