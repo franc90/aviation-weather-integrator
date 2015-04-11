@@ -1,0 +1,77 @@
+{
+  "version": 1428065130,
+  "rows": [
+    {
+      "name": "Aalborg Airport",
+      "iata": "AAL",
+      "icao": "EKYT",
+      "lat": "57.092781",
+      "lon": "9.849164",
+      "country": "Denmark",
+      "alt": "10"
+    },
+    {
+      "name": "Al Ain International Airport",
+      "iata": "AAN",
+      "icao": "OMAL",
+      "lat": "24.261660",
+      "lon": "55.609161",
+      "country": "United Arab Emirates",
+      "alt": "869"
+    },
+    {
+      "name": "New York John F. Kennedy International Airport",
+      "iata": "JFK",
+      "icao": "KJFK",
+      "lat": "40.639751",
+      "lon": "-73.778900",
+      "country": "United States",
+      "alt": "14"
+    },
+    {
+      "name": "Krakow John Paul II International Airport",
+      "iata": "KRK",
+      "icao": "EPKK",
+      "lat": "50.077728",
+      "lon": "19.784830",
+      "country": "Poland",
+      "alt": "791"
+    },
+    {
+      "name": "Kiruna Airport",
+      "iata": "KRN",
+      "icao": "ESNQ",
+      "lat": "67.821983",
+      "lon": "20.336760",
+      "country": "Sweden",
+      "alt": "1508"
+    },
+    {
+      "name": "Kurgan Airport",
+      "iata": "KRO",
+      "icao": "USUU",
+      "lat": "55.475269",
+      "lon": "65.415550",
+      "country": "Russia",
+      "alt": "240"
+    },
+    {
+      "name": "Karup Airport",
+      "iata": "KRP",
+      "icao": "EKKA",
+      "lat": "56.297451",
+      "lon": "9.124628",
+      "country": "Denmark",
+      "alt": "171"
+    },
+    {
+      "name": "Krasnodar International Airport",
+      "iata": "KRR",
+      "icao": "URKK",
+      "lat": "45.034679",
+      "lon": "39.170528",
+      "country": "Russia",
+      "alt": "118"
+    }
+  ]
+}
