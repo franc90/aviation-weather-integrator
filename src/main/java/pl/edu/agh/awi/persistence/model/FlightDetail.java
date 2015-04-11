@@ -14,7 +14,6 @@ public class FlightDetail {
     private Double longitude;
     private Double altitude;
     private Double speed;
-    private String track;
     private Date estimatedArrivalTime;
 
     public Date getTimestamp() {
@@ -47,14 +46,6 @@ public class FlightDetail {
 
     public void setSpeed(Double speed) {
         this.speed = speed;
-    }
-
-    public String getTrack() {
-        return track;
-    }
-
-    public void setTrack(String track) {
-        this.track = track;
     }
 
     public Date getEstimatedArrivalTime() {
