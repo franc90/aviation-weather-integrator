@@ -74,7 +74,7 @@ public class AirPortRepositoryTest {
         AirPort airPort = findAirPortByName();
         airPort.addMetar(metar);
         airPort.addTaf(taf);
-        airPort.addAirSigment(airSigmet);
+        airPort.addAirSigmet(airSigmet);
         airPortRepository.save(airPort);
     }
 
@@ -82,6 +82,7 @@ public class AirPortRepositoryTest {
         AirPort airPort  = ModelBuilder.build(AirPort::new, a -> {
             a.setName(AIR_PORT_NAME);
             a.setLatitude(LATITUDE);
+
         });
 
         airPortRepository.saveOnly(airPort);
