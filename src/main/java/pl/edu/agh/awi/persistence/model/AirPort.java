@@ -40,7 +40,7 @@ public class AirPort {
     @RelatedTo(type = "taf")
     private Set<Taf> tafs = Sets.newHashSet();
 
-    @RelatedTo(type = "airsigment")
+    @RelatedTo(type = "airsigmet")
     private Set<AirSigmet> airSigmets = Sets.newHashSet();
 
     @RelatedTo(type = "from")
@@ -141,7 +141,7 @@ public class AirPort {
         tafs.add(taf);
     }
 
-    public void addAirSigment(AirSigmet airSigmet) {
+    public void addAirSigmet(AirSigmet airSigmet) {
         airSigmets.add(airSigmet);
     }
 

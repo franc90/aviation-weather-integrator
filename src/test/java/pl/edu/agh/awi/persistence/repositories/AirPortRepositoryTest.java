@@ -71,7 +71,7 @@ public class AirPortRepositoryTest {
             a.setNumberOfRunways(13);
             a.addTaf(taf);
             a.addMetar(metar);
-            a.addAirSigment(airSigmet);
+            a.addAirSigmet(airSigmet);
         });
     }
 
