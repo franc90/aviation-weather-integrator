@@ -5,7 +5,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import pl.edu.agh.awi.loader.StartupLoader;
+import pl.edu.agh.awi.loader.AbstractLoader;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class Application implements CommandLineRunner {
 
     @Autowired
-    private List<StartupLoader> loaders;
+    private List<AbstractLoader> loaders;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
