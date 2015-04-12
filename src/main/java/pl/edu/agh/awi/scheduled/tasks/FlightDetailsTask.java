@@ -7,7 +7,7 @@ import pl.edu.agh.awi.scheduled.CronHelper;
 import pl.edu.agh.awi.scheduled.cache.CachedFlight;
 
 @Component
-public class FlightTask extends AbstractHazelcastTask {
+public class FlightDetailsTask extends AbstractHazelcastTask {
 
     private IMap<String, CachedFlight> flights;
 
@@ -21,6 +21,7 @@ public class FlightTask extends AbstractHazelcastTask {
 
     @Scheduled(cron = CronHelper.EVERY_QUARTER)
     public void task() {
+
     }
 
 }

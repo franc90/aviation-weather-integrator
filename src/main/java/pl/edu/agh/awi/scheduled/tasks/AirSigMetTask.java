@@ -14,6 +14,7 @@ public class AirSigMetTask {
     @Autowired
     private AbstractWeatherClient<Response, RectangularRegion> client;
 
+
     @Scheduled(cron = CronHelper.AIRSIGMET_CRON)
     public void task() {
 
