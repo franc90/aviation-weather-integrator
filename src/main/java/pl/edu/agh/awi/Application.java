@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import pl.edu.agh.awi.loader.StartupLoader;
+import pl.edu.agh.awi.loader.AbstractLoader;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -18,7 +18,7 @@ public class Application implements CommandLineRunner {
 
     public static final String DEFAULT_ZONE = "northamerica";
     @Autowired
-    private List<StartupLoader> loaders;
+    private List<AbstractLoader> loaders;
 
     @Autowired
     private HazelcastInstance hazelcast;

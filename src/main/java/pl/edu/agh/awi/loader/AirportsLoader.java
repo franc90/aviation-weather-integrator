@@ -1,23 +1,14 @@
 package pl.edu.agh.awi.loader;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.awi.downloader.flights.AbstractFlightsClient;
 import pl.edu.agh.awi.downloader.flights.airport.data.Airport;
 import pl.edu.agh.awi.downloader.flights.airport.data.AirportResponse;
-import pl.edu.agh.awi.loader.converter.LoaderConverter;
 import pl.edu.agh.awi.persistence.model.AirPort;
 
 import java.util.List;
 
 @Component
-public class AirportsLoader implements StartupLoader {
-
-    @Autowired
-    private AbstractFlightsClient<AirportResponse, ?> client;
-
-    @Autowired
-    private LoaderConverter<Airport, AirPort> converter;
+public class AirportsLoader extends AbstractLoader<AirportResponse, Airport, AirPort> {
 
     @Override
     public void loadData() {

@@ -1,10 +1,7 @@
 package pl.edu.agh.awi.loader;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.awi.downloader.flights.AbstractFlightsClient;
 import pl.edu.agh.awi.downloader.flights.balancer.data.LoadBalancerResponse;
-import pl.edu.agh.awi.loader.converter.LoaderConverter;
 import pl.edu.agh.awi.persistence.model.LoadBalancer;
 
 import java.util.ArrayList;
@@ -12,13 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class LoadBalancerNodesLoader implements StartupLoader {
-
-    @Autowired
-    private AbstractFlightsClient<LoadBalancerResponse, ?> client;
-
-    @Autowired
-    private LoaderConverter<Map.Entry<String, Integer>, LoadBalancer> converter;
+public class LoadBalancerNodesLoader extends AbstractLoader<LoadBalancerResponse, Map.Entry<String, Integer>, LoadBalancer> {
 
     @Override
     public void loadData() {
