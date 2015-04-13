@@ -1,27 +1,27 @@
 package pl.edu.agh.awi.downloader.weather.parameters;
 
 public class RectangularRegionBuilder {
-    private int minimalLatitude;
-    private int minimalLongitude;
-    private int maximalLatitude;
-    private int maximalLongitude;
+    private double minimalLatitude;
+    private double minimalLongitude;
+    private double maximalLatitude;
+    private double maximalLongitude;
 
-    public RectangularRegionBuilder setMinimalLatitude(int minimalLatitude) {
+    public RectangularRegionBuilder setMinimalLatitude(double minimalLatitude) {
         this.minimalLatitude = minimalLatitude;
         return this;
     }
 
-    public RectangularRegionBuilder setMinimalLongitude(int minimalLongitude) {
+    public RectangularRegionBuilder setMinimalLongitude(double minimalLongitude) {
         this.minimalLongitude = minimalLongitude;
         return this;
     }
 
-    public RectangularRegionBuilder setMaximalLatitude(int maximalLatitude) {
+    public RectangularRegionBuilder setMaximalLatitude(double maximalLatitude) {
         this.maximalLatitude = maximalLatitude;
         return this;
     }
 
-    public RectangularRegionBuilder setMaximalLongitude(int maximalLongitude) {
+    public RectangularRegionBuilder setMaximalLongitude(double maximalLongitude) {
         this.maximalLongitude = maximalLongitude;
         return this;
     }
