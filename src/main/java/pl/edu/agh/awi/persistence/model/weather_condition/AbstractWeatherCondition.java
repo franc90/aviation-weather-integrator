@@ -141,8 +141,4 @@ public abstract class AbstractWeatherCondition {
         icingConditions.add(icingCondition);
     }
 
-    public interface WeatherConditionFunction<T> {
-        T withWeatherCondition(AbstractWeatherCondition condition);
-    }
-
 }

@@ -2,6 +2,7 @@ package pl.edu.agh.awi.persistence.model;
 
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.GraphId;
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -12,8 +13,14 @@ public class AirLine {
 
     @GraphId
     private Long id;
+
+    @Indexed
     private String name;
+
+    @Indexed
     private String iataCode;
+
+    @Indexed
     private String icaoCode;
 
     @RelatedTo(type = "belongs_to", direction = Direction.INCOMING)

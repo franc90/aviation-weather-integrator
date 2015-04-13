@@ -17,7 +17,7 @@ public class AirPort {
     @GraphId
     private Long id;
 
-    @Indexed(unique = true)
+    @Indexed
     private String name;
 
     private String city;
@@ -30,8 +30,10 @@ public class AirPort {
 
     private Double latitude;
 
+    @Indexed
     private String iataCode;
 
+    @Indexed
     private String icaoCode;
 
     @RelatedTo(type = "metar")

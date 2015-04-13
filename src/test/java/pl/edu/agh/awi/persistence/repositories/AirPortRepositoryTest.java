@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.awi.persistence.PersistenceConfig;
 import pl.edu.agh.awi.persistence.TestDatabaseConfig;
+import pl.edu.agh.awi.persistence.model.AirLine;
 import pl.edu.agh.awi.persistence.model.AirPort;
 import pl.edu.agh.awi.persistence.model.Flight;
 import pl.edu.agh.awi.persistence.model.ModelBuilder;
@@ -26,7 +27,7 @@ import static org.junit.Assert.*;
 @DirtiesContext
 @ContextConfiguration(classes = {PersistenceConfig.class, TestDatabaseConfig.class})
 @ActiveProfiles("test")
-public class AirPortRepositoryTest {
+public class AirPortRepositoryTest extends AbstractAviationGraphRepositoryTest<AirPort> {
 
     private static final String AIR_PORT_NAME = "airport1";
     private static final String METAR = "METAR" ;
@@ -48,7 +49,6 @@ public class AirPortRepositoryTest {
     public void shouldSaveAirPortWithoutRelations() {
         saveAirPort();
         AirPort airPortFromDB = findAirPortByName();
-        assertTrue(airPortRepository.count() == 1);
         assertEmptyRelations(Metar.class, Taf.class, Flight.class);
         assertEquals(AIR_PORT_NAME, airPortFromDB.getName());
         assertTrue(Double.compare(LATITUDE, airPortFromDB.getLatitude()) == 0);
@@ -84,7 +84,6 @@ public class AirPortRepositoryTest {
             a.setLatitude(LATITUDE);
 
         });
-
         airPortRepository.saveOnly(airPort);
     }
 
@@ -152,4 +151,21 @@ public class AirPortRepositoryTest {
                .allMatch(forecast -> TIMESTAMP.equals(forecast.getTimestamp()) && AirSigmetType.AIRMET == forecast.getType()));
     }
 
+    @Override
+    protected AviationDelegate<AirPort> createAviationDelegate() {
+        AirPort airPort = new AirPort();
+        return AviationDelegate.build()
+                .withAviationItem(airPort)
+                .withNameSetter(airPort::setName)
+                .withIcaoCodeSetter(airPort::setIcaoCode)
+                .withIataCodeSetter(airPort::setIataCode);
+    }
+
+    @Override
+    protected AviationGettersComposite createGettersCompositeFor(AirPort airPort) {
+        return AviationGettersComposite.build()
+                .withNameGetter(airPort::getName)
+                .withIcaoCodeGetter(airPort::getIcaoCode)
+                .withIataCodeGetter(airPort::getIataCode);
+    }
 }
