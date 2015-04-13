@@ -15,6 +15,8 @@ public class AirportsLoader extends AbstractLoader<AirportResponse, Airport, Air
         AirportResponse response = client.getResponse();
         List<AirPort> airports = converter.convert(response.getAirports());
 
+
+        // TODO: filter airports - not every is needed
         // TODO: save to db
         System.out.println("AIRPORTS_LOADER: " + airports.size());
     }
