@@ -17,8 +17,12 @@ public class Flight {
     private Long flightId;
     private String status;
     private String aircraft;
+
+    @GraphProperty(propertyType = long.class)
     private Date scheduledDepartureTime;
     private Date actualDepartureTime;
+
+    @GraphProperty(propertyType = long.class)
     private Date scheduledArrivalTime;
     private Date actualArrivalTime;
 

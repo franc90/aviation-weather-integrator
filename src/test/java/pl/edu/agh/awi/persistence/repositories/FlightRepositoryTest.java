@@ -14,8 +14,11 @@ import pl.edu.agh.awi.persistence.PersistenceConfig;
 import pl.edu.agh.awi.persistence.TestDatabaseConfig;
 import pl.edu.agh.awi.persistence.model.*;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -61,12 +64,16 @@ public class FlightRepositoryTest {
     private AirPort createAirPortWithName(String name) {
         AirPort airPort = new AirPort();
         airPort.setName(name);
+        airPort.setIataCode("iata");
+        airPort.setIcaoCode("icao");
         return airPort;
     }
 
     private AirLine createAirLineWithName(String name) {
         AirLine airLine = new AirLine();
         airLine.setName(name);
+        airLine.setIcaoCode("someCode");
+        airLine.setIataCode("someCode2");
         return airLine;
     }
 
@@ -75,7 +82,10 @@ public class FlightRepositoryTest {
             f.setFlightId(EXISTING_FLIGHT_ID);
             f.setStatus("ON_AIR");
             f.setDepartureAirport(departureAirPort);
+            f.setAirLine(airLine);
             f.addDestinationAirPort(arrivalAirPort);
+            f.setScheduledDepartureTime(new Date());
+            f.setScheduledArrivalTime(new Date());
         });
     }
 
@@ -83,6 +93,48 @@ public class FlightRepositoryTest {
     public void shouldFindFlightById() {
         Flight flight = flightRepository.findByFlightId(EXISTING_FLIGHT_ID);
         assertEquals(existingFlight, flight);
+    }
+
+    @Test
+    public void shouldFindByAirLineIcaoCode() {
+        assertFlights(flightRepository::findByAirLineIcaoCode, airLine.getIcaoCode());
+    }
+
+    @Test
+    public void shouldFindByAirLineIataCode() {
+        assertFlights(flightRepository::findByAirLineIataCode, airLine.getIataCode());
+    }
+
+    @Test
+    public void shouldFindByDepartureAirportIcaoCode() {
+        assertFlights(flightRepository::findByDepartureAirportIcaoCode, departureAirPort.getIcaoCode());
+    }
+
+    @Test
+    public void shouldFindByDepartureAirportIataCode() {
+        assertFlights(flightRepository::findByDepartureAirportIataCode, departureAirPort.getIataCode());
+    }
+
+    @Test
+    public void shouldFindByScheduledDepartureTimeBetween() {
+        assertFlights(flightRepository::findByScheduledDepartureTimeBetween, existingFlight.getScheduledDepartureTime().getTime(), new Date().getTime());
+    }
+
+    @Test
+    public void shouldFindByScheduledArrivalTimeBetween() {
+        assertFlights(flightRepository::findByScheduledArrivalTimeBetween, existingFlight.getScheduledDepartureTime().getTime(), new Date().getTime());
+    }
+
+    private void assertFlights(Function<String, Collection<Flight>> findFunction, String findParam) {
+        assertFlights(findFunction.apply(findParam));
+    }
+
+    private void assertFlights(BiFunction<Long, Long, Collection<Flight>> findFunction, Long firstParam, Long secondParam) {
+        assertFlights(findFunction.apply(firstParam, secondParam));
+    }
+
+    private void assertFlights(Collection<Flight> flights) {
+        assertTrue(flights.contains(existingFlight));
     }
 
     @Test
@@ -124,7 +176,7 @@ public class FlightRepositoryTest {
                 .stream()
                 .allMatch(
                         dest -> (matchOrdinalNumberAndArrivalAirPort(dest, 2L, redirectedAirPort)
-                                    || matchOrdinalNumberAndArrivalAirPort(dest, 1L, arrivalAirPort))
+                                || matchOrdinalNumberAndArrivalAirPort(dest, 1L, arrivalAirPort))
                                 && dest.getFlight().equals(flightFromDB)));
     }
 
@@ -161,7 +213,7 @@ public class FlightRepositoryTest {
 
     private void assertArrivalAirPort(Set<DestinationAirPort> arrivalAirports, int expectedSize) {
         assertNotNull(arrivalAirports);
-        System.out.println(arrivalAirports.size() +" " + expectedSize);
+        System.out.println(arrivalAirports.size() + " " + expectedSize);
         assertTrue(arrivalAirports.size() == expectedSize);
     }
 
