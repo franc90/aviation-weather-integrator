@@ -147,6 +147,8 @@ public class AirPort {
         airSigmets.add(airSigmet);
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
