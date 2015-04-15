@@ -9,6 +9,12 @@ public class CachedFlight {
     private String departureIata;
     private Date lastUpdated;
 
+    public CachedFlight(String arrivalIata, String departureIata, Date lastUpdated) {
+        this.arrivalIata = arrivalIata;
+        this.departureIata = departureIata;
+        this.lastUpdated = lastUpdated;
+    }
+
     public String getStatus() {
         return status;
     }
