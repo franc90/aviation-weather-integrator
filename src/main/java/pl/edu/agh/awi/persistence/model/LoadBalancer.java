@@ -12,6 +12,13 @@ public class LoadBalancer {
     private String domain;
     private Integer load;
 
+    public static LoadBalancer createInstance(String domain, Integer load) {
+        LoadBalancer loadBalancer = new LoadBalancer();
+        loadBalancer.load = load;
+        loadBalancer.domain = domain;
+        return loadBalancer;
+    }
+
     public String getDomain() {
         return domain;
     }

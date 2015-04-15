@@ -15,4 +15,5 @@ public class DatabaseConfig {
     GraphDatabaseService graphDatabaseService() {
         return new GraphDatabaseFactory().newEmbeddedDatabase(DB);
     }
+
 }
