@@ -34,7 +34,7 @@ public class FlightRepositoryTest {
     private static final String DEPARTURE_NAME = "departure";
     private static final String ARRIVAL_NAME = "arrival";
     private static final String AIR_LINE = "airline";
-    private static final Long EXISTING_FLIGHT_ID = 10L;
+    private static final String EXISTING_FLIGHT_ID = "flight:no:10";
 
     @Autowired
     private FlightRepository flightRepository;
@@ -183,7 +183,7 @@ public class FlightRepositoryTest {
     @Test
     public void shouldSaveFlightWithAirLineAndAirPorts() {
         int expectedSize = 1;
-        Long flightId = 1L;
+        String flightId = "flight:no:1";
         Flight flight = new Flight();
         flight.setFlightId(flightId);
         flight.setDepartureAirport(departureAirPort);

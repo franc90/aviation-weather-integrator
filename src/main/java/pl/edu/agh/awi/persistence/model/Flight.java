@@ -13,17 +13,21 @@ public class Flight {
     @GraphId
     private Long id;
 
-    @Indexed(unique = true)
-    private Long flightId;
+    @Indexed
+    private String flightId;
+
     private String status;
+
     private String aircraft;
 
     @GraphProperty(propertyType = long.class)
     private Date scheduledDepartureTime;
+
     private Date actualDepartureTime;
 
     @GraphProperty(propertyType = long.class)
     private Date scheduledArrivalTime;
+
     private Date actualArrivalTime;
 
     @RelatedTo(type = "belongs_to")
@@ -41,11 +45,11 @@ public class Flight {
     @RelatedTo(type = "flight_details")
     private Set<FlightDetail> flightDetails = Sets.newHashSet();
 
-    public Long getFlightId() {
+    public String getFlightId() {
         return flightId;
     }
 
-    public void setFlightId(Long flightId) {
+    public void setFlightId(String flightId) {
         this.flightId = flightId;
     }
 

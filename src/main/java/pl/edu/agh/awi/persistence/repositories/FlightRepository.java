@@ -5,11 +5,10 @@ import org.springframework.data.neo4j.repository.GraphRepository;
 import pl.edu.agh.awi.persistence.model.Flight;
 
 import java.util.Collection;
-import java.util.Date;
 
 public interface FlightRepository extends GraphRepository<Flight> {
 
-    Flight findByFlightId(Long flightId);
+    Flight findByFlightId(String flightId);
 
     Collection<Flight> findByAirLineIcaoCode(String icaoCode);
 

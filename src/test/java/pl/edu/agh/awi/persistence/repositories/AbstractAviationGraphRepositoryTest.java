@@ -32,7 +32,7 @@ public abstract class AbstractAviationGraphRepositoryTest<T> {
 
     private Map<String, Function<String, T>> findMethodMap;
     private static final String NAME = "NAME";
-    private static final String ICAO = "ICAOU";
+    private static final String ICAO = "ICAO";
     private static final String IATA = "IATA";
 
     @Autowired
