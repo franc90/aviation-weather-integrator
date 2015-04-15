@@ -213,7 +213,6 @@ public class FlightRepositoryTest {
 
     private void assertArrivalAirPort(Set<DestinationAirPort> arrivalAirports, int expectedSize) {
         assertNotNull(arrivalAirports);
-        System.out.println(arrivalAirports.size() + " " + expectedSize);
         assertTrue(arrivalAirports.size() == expectedSize);
     }
 
