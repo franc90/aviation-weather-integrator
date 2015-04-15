@@ -27,4 +27,9 @@ public interface FlightRepository extends GraphRepository<Flight> {
             "WHERE flight.scheduledArrivalTime >= {0} AND flight.scheduledArrivalTime < {1} " +
             "RETURN flight ")
     Collection<Flight> findByScheduledArrivalTimeBetween(long timeFromStartDate, long timeFromEndDate);
+
+    @Query("MATCH (flight:Flight) " +
+            "WHERE UPPER(flight.status) <> 'LANDED' " +
+            "RETURN flight ")
+    Collection<Flight> findNotLanded();
 }
