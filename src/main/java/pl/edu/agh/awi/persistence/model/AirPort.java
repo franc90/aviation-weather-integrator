@@ -17,7 +17,7 @@ public class AirPort {
     @GraphId
     private Long id;
 
-    @Indexed(unique = true)
+    @Indexed
     private String name;
 
     private String city;
@@ -30,8 +30,10 @@ public class AirPort {
 
     private Double latitude;
 
+    @Indexed
     private String iataCode;
 
+    @Indexed
     private String icaoCode;
 
     @RelatedTo(type = "metar")
@@ -144,6 +146,8 @@ public class AirPort {
     public void addAirSigmet(AirSigmet airSigmet) {
         airSigmets.add(airSigmet);
     }
+
+
 
     @Override
     public boolean equals(Object o) {

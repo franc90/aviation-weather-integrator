@@ -13,32 +13,43 @@ public class Flight {
     @GraphId
     private Long id;
 
-    @Indexed(unique = true)
-    private Long flightId;
+    @Indexed
+    private String flightId;
+
     private String status;
+
     private String aircraft;
+
+    @GraphProperty(propertyType = long.class)
     private Date scheduledDepartureTime;
+
     private Date actualDepartureTime;
+
+    @GraphProperty(propertyType = long.class)
     private Date scheduledArrivalTime;
+
     private Date actualArrivalTime;
 
     @RelatedTo(type = "belongs_to")
+    @Fetch
     private AirLine airLine;
 
     @RelatedTo(type = "from", direction = Direction.INCOMING)
+    @Fetch
     private AirPort departureAirport;
 
     @RelatedToVia(type = "to")
+    @Fetch
     private Set<DestinationAirPort> arrivalAirports = Sets.newHashSet();
 
     @RelatedTo(type = "flight_details")
-    private Set<FlightDetail> details = Sets.newHashSet();
+    private Set<FlightDetail> flightDetails = Sets.newHashSet();
 
-    public Long getFlightId() {
+    public String getFlightId() {
         return flightId;
     }
 
-    public void setFlightId(Long flightId) {
+    public void setFlightId(String flightId) {
         this.flightId = flightId;
     }
 
@@ -102,8 +113,8 @@ public class Flight {
         return arrivalAirports;
     }
 
-    public Set<FlightDetail> getDetails() {
-        return details;
+    public Set<FlightDetail> getFlightDetails() {
+        return flightDetails;
     }
 
     public AirLine getAirLine() {
@@ -112,6 +123,23 @@ public class Flight {
 
     public void setAirLine(AirLine airLine) {
         this.airLine = airLine;
+    }
+
+    public void addFlightDetail(FlightDetail flightDetail) {
+        flightDetails.add(flightDetail);
+    }
+
+    public void addDestinationAirPort(AirPort arrivalAirPort) {
+        int ordinalNumber = getNextOrdinalNumber();
+        DestinationAirPort destinationAirPort = DestinationAirPort.build()
+                                                    .withOrdinalNumber(Long.valueOf(ordinalNumber))
+                                                    .withFlight(this)
+                                                    .withArrivalAirPort(arrivalAirPort);
+        arrivalAirports.add(destinationAirPort);
+    }
+
+    private int getNextOrdinalNumber() {
+        return arrivalAirports.size() + 1;
     }
 
     @Override
