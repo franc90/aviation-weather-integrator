@@ -1,8 +1,9 @@
 package pl.edu.agh.awi.scheduled.cache;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class CachedFlight {
+public class CachedFlight implements Serializable{
 
     private String status;
     private String arrivalIata;

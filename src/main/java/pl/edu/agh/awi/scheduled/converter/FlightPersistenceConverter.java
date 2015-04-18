@@ -4,6 +4,7 @@ package pl.edu.agh.awi.scheduled.converter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.awi.downloader.exceptions.FlightTaskException;
 import pl.edu.agh.awi.persistence.model.AirLine;
 import pl.edu.agh.awi.persistence.model.AirPort;
@@ -13,6 +14,7 @@ import pl.edu.agh.awi.persistence.repositories.AirPortRepository;
 import pl.edu.agh.awi.scheduled.helper.flight.SingleValueDownloaderHelper;
 
 @Component
+@Transactional
 public class FlightPersistenceConverter {
 
     @Autowired

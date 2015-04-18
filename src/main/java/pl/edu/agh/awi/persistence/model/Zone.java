@@ -5,10 +5,11 @@ import org.springframework.data.neo4j.annotation.GraphId;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @NodeEntity
-public class Zone {
+public class Zone implements Serializable {
 
     @GraphId
     private Long id;

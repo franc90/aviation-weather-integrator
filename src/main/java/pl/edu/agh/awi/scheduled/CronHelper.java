@@ -2,7 +2,7 @@ package pl.edu.agh.awi.scheduled;
 
 public interface CronHelper {
 
-    String EVERY_QUARTER = "1/3 * * * * ?";
+    String EVERY_QUARTER = "1/30 * * * * ?";
 
     String METAR_CRON = "* 12 */1 * * *";
 
