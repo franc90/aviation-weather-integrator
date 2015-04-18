@@ -3,9 +3,9 @@ package pl.edu.agh.awi.scheduled.tasks;
 import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.conversion.Result;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import pl.edu.agh.awi.downloader.exceptions.FlightTaskException;
 import pl.edu.agh.awi.downloader.flights.flight.client.FlightClient;
@@ -21,11 +21,19 @@ import pl.edu.agh.awi.scheduled.cache.CachedFlight;
 import pl.edu.agh.awi.scheduled.cache.CachedFlightBuilder;
 import pl.edu.agh.awi.scheduled.converter.FlightPersistenceConverter;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Component
+@Transactional
 public class FlightTask extends AbstractHazelcastTask {
+
+    private static final String NORTHAMERICA = "northamerica";
+
+    private final Logger logger = Logger.getLogger("FlightTask");
 
     private IMap<String, CachedFlight> flights;
 
@@ -71,37 +79,43 @@ public class FlightTask extends AbstractHazelcastTask {
 
     private Zone zone() {
         if (CollectionUtils.isEmpty(zones)) {
-            return loadZoneFromDb();
+            return getZone(loadZoneFromDb(), NORTHAMERICA);
         }
 
-        return zones.get(0);
+        return getZone(zones, NORTHAMERICA);
     }
 
-    private Zone loadZoneFromDb() {
-        Result<Zone> all = zoneRepository.findAll();
-        Zone zone = all.singleOrNull();
+    private Zone getZone(List<Zone> zones, String zoneName) {
+        for (Zone zone : zones) {
+            if (zoneName.equals(zone.getName())) {
+                return zone;
+            }
+        }
 
-        if (zone == null) {
+        throw new FlightTaskException("No zone " + zoneName);
+    }
+
+    private List<Zone> loadZoneFromDb() {
+        Collection<Zone> zones = zoneRepository.findAll().as(Collection.class);
+
+        if (CollectionUtils.isEmpty(zones)) {
             throw new FlightTaskException("No zone");
         }
 
-        return zone;
+        return new ArrayList<>(zones);
     }
 
     private LoadBalancer loadBalancer() {
-        Result<LoadBalancer> all = loadBalancerRepository.findAll();
+        Collection<LoadBalancer> loadBalancers = loadBalancerRepository.findAll().as(Collection.class);
 
-        LoadBalancer loadBalancer = all.singleOrNull();
-        if (loadBalancer == null) {
+        if (CollectionUtils.isEmpty(loadBalancers)) {
             throw new FlightTaskException("No loadBalancer");
         }
 
-        for (LoadBalancer balancer : all) {
-            if (balancer.getLoad() < loadBalancer.getLoad()) {
-                loadBalancer = balancer;
-            }
-        }
-        return loadBalancer;
+        return loadBalancers
+                .stream()
+                .min((x, y) -> x.getLoad().compareTo(y.getLoad()))
+                .get();
     }
 
     private void downloadFlights(Zone zone, LoadBalancer loadBalancer) {
@@ -131,11 +145,17 @@ public class FlightTask extends AbstractHazelcastTask {
     }
 
     private void saveFlight(Flight flight) {
-        pl.edu.agh.awi.persistence.model.Flight persistenceFlight = flightPersistenceConverter.convert(flight);
-        flightRepository.save(persistenceFlight);
+        try {
+            pl.edu.agh.awi.persistence.model.Flight persistenceFlight = flightPersistenceConverter.convert(flight);
 
-        CachedFlight cachedFlight = convert(flight);
-        flights.put(flight.getFlightId(), cachedFlight);
+            logger.info("Processing " + persistenceFlight.getAirLine().getIataCode() + "-" + persistenceFlight.getFlightId() + "-" + persistenceFlight.getDepartureAirport().getCity());
+            flightRepository.save(persistenceFlight);
+
+            CachedFlight cachedFlight = convert(flight);
+            flights.put(flight.getFlightId(), cachedFlight);
+        } catch (FlightTaskException e) {
+            logger.info(e.getMessage());
+        }
     }
 
     private CachedFlight convert(Flight flight) {

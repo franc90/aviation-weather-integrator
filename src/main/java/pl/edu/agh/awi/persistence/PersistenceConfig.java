@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableNeo4jRepositories(basePackages = PersistenceConfig.BASE_PACKAGE)
 public class PersistenceConfig extends Neo4jConfiguration {
 
-    public static final String BASE_PACKAGE = "pl.edu.agh.awi.persistence";
+    public static final String BASE_PACKAGE = "pl.edu.agh.awi";
 
     public PersistenceConfig() {
         setBasePackage(BASE_PACKAGE);
