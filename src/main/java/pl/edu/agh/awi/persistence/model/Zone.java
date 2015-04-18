@@ -116,19 +116,4 @@ public class Zone implements Serializable {
 
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Zone zone = (Zone) o;
-
-        return !(id != null ? !id.equals(zone.id) : zone.id != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
 }

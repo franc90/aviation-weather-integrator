@@ -35,18 +35,18 @@ public class ZoneRepositoryTest {
 
     @Test
     public void shouldFindWidestZone() {
-        Zone big = save(new Zone.Builder()
-                .withName("big")
-                .withLatitude(-20.0, 30.0)
-                .withLongitude(4.1, 24.4)
-                .build());
         save(new Zone.Builder()
                 .withName("small")
                 .withLatitude(20.0, 30.0)
                 .withLongitude(4.1, 4.4)
                 .build());
+        Zone big = save(new Zone.Builder()
+                .withName("big")
+                .withLatitude(-20.0, 30.0)
+                .withLongitude(4.1, 24.4)
+                .build());
         Zone zone = zoneRepository.findWidestZone();
-        assertEquals(big, zone);
+        assertEquals(big.getName(), zone.getName());
     }
 
     private Zone save(Zone zone) {
