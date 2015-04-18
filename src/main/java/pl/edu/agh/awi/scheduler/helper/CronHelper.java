@@ -4,12 +4,14 @@ public interface CronHelper {
 
     String TEST_CRON = "0/30 * * * * ?";
 
-    String QUATERLY_CRON = "* 0/15 * * * ?";
+    String FLIGHT_CRON = "* 0/15 * 1 * ?";
 
-    String METAR_CRON = "* 7 */1 * * *";
+    String FLIGHT_DETAIL_CRON = "* 5/15 * 1 * ?";
 
-    String TAF_CRON = "* 22 */6 * * *";
+    String METAR_CRON =  "* 12 */1 * * *";
 
-    String AIRSIGMET_CRON = "* 52 */1 * * *";
+    String TAF_CRON = "* 26 */6 * * *";
+
+    String AIRSIGMET_CRON = "* 48 */1 * * *";
 
 }

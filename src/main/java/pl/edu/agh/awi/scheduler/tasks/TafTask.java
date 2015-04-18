@@ -14,9 +14,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @Component
 public class TafTask extends AirportTask<Response> {
+
+    private final Logger logger = Logger.getLogger("TafTask");
 
     private static final int PORTION_SIZE = 25;
 
@@ -60,7 +63,10 @@ public class TafTask extends AirportTask<Response> {
                         taf -> notContains(airPort, taf))
                 .forEach(airPort::addTaf);
 
-        return airportTafs == airPort.getTafs().size() ? null : airPort;
+        boolean noNewTafs = airportTafs == airPort.getTafs().size();
+
+        logger.info("Saving new tafs? " + noNewTafs);
+        return noNewTafs ? null : airPort;
     }
 
     private boolean notContains(AirPort airPort, Taf taf) {

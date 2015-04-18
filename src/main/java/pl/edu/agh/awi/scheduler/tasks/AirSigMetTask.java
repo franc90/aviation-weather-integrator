@@ -1,5 +1,6 @@
 package pl.edu.agh.awi.scheduler.tasks;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -24,10 +25,13 @@ import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Component
 public class AirSigMetTask {
+
+    private final Logger logger = Logger.getLogger("AirSigMetTask");
 
     public static final String NORTH_AMERICA = "northamerica";
 
@@ -80,8 +84,17 @@ public class AirSigMetTask {
         List<AirPort> airsigmetAirports = getRelevantAirports(airsigmet, airPorts);
         AirSigmet airSigmet = AirSigmetConverter.convert(airsigmet);
 
+        logger.info("Saving airsigmet " + getAirsigmetName(airSigmet) + " for " + airsigmetAirports.size());
         airsigmetAirports.forEach(e -> e.addAirSigmet(airSigmet));
         airsigmetAirports.forEach(persistenceService::saveAirport);
+    }
+
+    private String getAirsigmetName(AirSigmet airSigmet) {
+        if (airSigmet.getHazard() != null && StringUtils.isNotBlank(airSigmet.getHazard().getType())) {
+            return airSigmet.getHazard().getType();
+        }
+
+        return airSigmet.getType().toString();
     }
 
     private List<AirPort> getRelevantAirports(AIRSIGMET airsigmet, List<AirPort> airPorts) {

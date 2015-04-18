@@ -13,9 +13,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @Component
 public class MetarTask extends AirportTask<Response> {
+
+    private final Logger logger = Logger.getLogger("MetarTask");
 
     private static final int PORTION_SIZE = 50;
 
@@ -59,7 +62,10 @@ public class MetarTask extends AirportTask<Response> {
                         metar -> persistenceService.isMetarNotConnectedWithAirPort(metar, airPort))
                 .forEach(airPort::addMetar);
 
-        return airportMetars == airPort.getMetars().size() ? null : airPort;
+        boolean noNewMetars = airportMetars == airPort.getMetars().size();
+
+        logger.info("Saving new metars? " + noNewMetars);
+        return noNewMetars ? null : airPort;
     }
 
 }
