@@ -11,6 +11,7 @@ import pl.edu.agh.awi.downloader.exceptions.FlightTaskException;
 import pl.edu.agh.awi.downloader.flights.flight.client.FlightClient;
 import pl.edu.agh.awi.downloader.flights.flight.data.Flight;
 import pl.edu.agh.awi.downloader.flights.flight.data.FlightResponse;
+import pl.edu.agh.awi.persistence.PersistenceService;
 import pl.edu.agh.awi.persistence.model.LoadBalancer;
 import pl.edu.agh.awi.persistence.model.Zone;
 import pl.edu.agh.awi.persistence.repositories.FlightRepository;
@@ -28,7 +29,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @Component
-@Transactional
 public class FlightTask extends AbstractHazelcastTask {
 
     private static final String NORTHAMERICA = "northamerica";
@@ -48,13 +48,7 @@ public class FlightTask extends AbstractHazelcastTask {
     private FlightPersistenceConverter flightPersistenceConverter;
 
     @Autowired
-    private LoadBalancerRepository loadBalancerRepository;
-
-    @Autowired
-    private ZoneRepository zoneRepository;
-
-    @Autowired
-    private FlightRepository flightRepository;
+    private PersistenceService persistenceService;
 
     @Override
     public void init() {
@@ -96,7 +90,7 @@ public class FlightTask extends AbstractHazelcastTask {
     }
 
     private List<Zone> loadZoneFromDb() {
-        Collection<Zone> zones = zoneRepository.findAll().as(Collection.class);
+        Collection<Zone> zones = persistenceService.findAllZones();
 
         if (CollectionUtils.isEmpty(zones)) {
             throw new FlightTaskException("No zone");
@@ -106,7 +100,7 @@ public class FlightTask extends AbstractHazelcastTask {
     }
 
     private LoadBalancer loadBalancer() {
-        Collection<LoadBalancer> loadBalancers = loadBalancerRepository.findAll().as(Collection.class);
+        Collection<LoadBalancer> loadBalancers = persistenceService.findAllLoadBalancers();
 
         if (CollectionUtils.isEmpty(loadBalancers)) {
             throw new FlightTaskException("No loadBalancer");
@@ -149,7 +143,7 @@ public class FlightTask extends AbstractHazelcastTask {
             pl.edu.agh.awi.persistence.model.Flight persistenceFlight = flightPersistenceConverter.convert(flight);
 
             logger.info("Processing " + persistenceFlight.getAirLine().getIataCode() + "-" + persistenceFlight.getFlightId() + "-" + persistenceFlight.getDepartureAirport().getCity());
-            flightRepository.save(persistenceFlight);
+            persistenceService.saveFlight(persistenceFlight);
 
             CachedFlight cachedFlight = convert(flight);
             flights.put(flight.getFlightId(), cachedFlight);

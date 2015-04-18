@@ -17,6 +17,7 @@ import java.math.BigInteger;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,6 +32,26 @@ public class ZoneRepositoryTest {
 
     @Autowired
     private Neo4jTemplate neo4jTemplate;
+
+    @Test
+    public void shouldFindWidestZone() {
+        Zone big = save(new Zone.Builder()
+                .withName("big")
+                .withLatitude(-20.0, 30.0)
+                .withLongitude(4.1, 24.4)
+                .build());
+        save(new Zone.Builder()
+                .withName("small")
+                .withLatitude(20.0, 30.0)
+                .withLongitude(4.1, 4.4)
+                .build());
+        Zone zone = zoneRepository.findWidestZone();
+        assertEquals(big, zone);
+    }
+
+    private Zone save(Zone zone) {
+        return neo4jTemplate.save(zone);
+    }
 
     @Test
     public void shouldSaveZoneWithRelatedSubZones() {
