@@ -16,6 +16,7 @@ import pl.edu.agh.awi.persistence.model.AirPort;
 import pl.edu.agh.awi.persistence.model.Zone;
 import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
 import pl.edu.agh.awi.scheduler.converter.AirSigmetConverter;
+import pl.edu.agh.awi.scheduler.exception.SchedulerException;
 import pl.edu.agh.awi.scheduler.helper.CronHelper;
 import pl.edu.agh.awi.scheduler.helper.ZoneHelper;
 import pl.edu.agh.awi.scheduler.helper.airsigmet.AreaHelper;
@@ -46,9 +47,13 @@ public class AirSigMetTask {
 
     @Scheduled(cron = CronHelper.AIRSIGMET_CRON)
     public void task() {
-        Response response = getResponse();
-        List<AirPort> airPorts = loadAirports();
-        convertAndSave(response, airPorts);
+        try {
+            Response response = getResponse();
+            List<AirPort> airPorts = loadAirports();
+            convertAndSave(response, airPorts);
+        } catch (SchedulerException ex) {
+            logger.info(ex.getMessage());
+        }
     }
 
     private Response getResponse() {
@@ -72,7 +77,7 @@ public class AirSigMetTask {
     }
 
     private void convertAndSave(Response response, List<AirPort> airPorts) {
-        if (response == null || response.getData() == null || CollectionUtils.isEmpty(response.getData().getAIRSIGMET())) {
+        if (checkAirsigmetsExist(response) || CollectionUtils.isEmpty(airPorts)) {
             return;
         }
 
@@ -80,13 +85,16 @@ public class AirSigMetTask {
         airsigmets.forEach(e -> convertAndSave(e, airPorts));
     }
 
+    private boolean checkAirsigmetsExist(Response response) {
+        return response == null || response.getData() == null || CollectionUtils.isEmpty(response.getData().getAIRSIGMET());
+    }
+
     private void convertAndSave(AIRSIGMET airsigmet, List<AirPort> airPorts) {
         List<AirPort> airsigmetAirports = getRelevantAirports(airsigmet, airPorts);
         AirSigmet airSigmet = AirSigmetConverter.convert(airsigmet);
 
         logger.info("Saving airsigmet " + getAirsigmetName(airSigmet) + " for " + airsigmetAirports.size());
-        airsigmetAirports.forEach(e -> e.addAirSigmet(airSigmet));
-        airsigmetAirports.forEach(persistenceService::saveAirport);
+        airsigmetAirports.forEach(airport -> persistenceService.addAirsigmet(airport, airSigmet));
     }
 
     private String getAirsigmetName(AirSigmet airSigmet) {

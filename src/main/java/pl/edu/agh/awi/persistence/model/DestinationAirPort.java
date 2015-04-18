@@ -18,7 +18,7 @@ public class DestinationAirPort {
     @Fetch
     private AirPort arrivalAirPort;
 
-    public DestinationAirPort(){
+    public DestinationAirPort() {
 
     }
 

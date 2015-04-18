@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.awi.persistence.model.*;
+import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
 import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
 import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
 import pl.edu.agh.awi.persistence.repositories.*;
@@ -86,5 +87,20 @@ public class PersistenceService {
     @Transactional(readOnly = true)
     public boolean isTafNotConnectedWithAirPort(Taf taf, AirPort airPort) {
         return airPortRepository.countTafsInAirPort(taf.getValidFrom(), taf.getValidTo(), airPort.getIcaoCode()) == 0;
+    }
+
+    @Transactional
+    public void addMetar(AirPort airPort, Metar metar) {
+        airPort.addMetar(metar);
+    }
+
+    @Transactional
+    public void addTaf(AirPort airPort, Taf taf) {
+        airPort.addTaf(taf);
+    }
+
+    @Transactional
+    public void addAirsigmet(AirPort airport, AirSigmet airSigmet) {
+        airport.addAirSigmet(airSigmet);
     }
 }

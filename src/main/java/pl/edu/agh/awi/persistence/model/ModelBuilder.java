@@ -4,12 +4,12 @@ package pl.edu.agh.awi.persistence.model;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import java.lang.FunctionalInterface;
 
 public class ModelBuilder {
 
     @FunctionalInterface
-    public interface Setter<T> extends Consumer<T> {}
+    public interface Setter<T> extends Consumer<T> {
+    }
 
     @SafeVarargs
     public static <T> T build(Supplier<T> modelSupplier, Setter<T>... setters) {
@@ -18,6 +18,7 @@ public class ModelBuilder {
         return model;
     }
 
-    private ModelBuilder(){}
+    private ModelBuilder() {
+    }
 
 }

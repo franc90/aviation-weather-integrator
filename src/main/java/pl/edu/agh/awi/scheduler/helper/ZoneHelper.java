@@ -48,7 +48,7 @@ public class ZoneHelper extends AbstractHazelcastComponent {
         Collection<Zone> zones = persistenceService.findAllZones();
 
         if (CollectionUtils.isEmpty(zones)) {
-            throw new SchedulerException("No zone");
+            throw new SchedulerException("No zones in database nor cache");
         }
 
         return new ArrayList<>(zones);

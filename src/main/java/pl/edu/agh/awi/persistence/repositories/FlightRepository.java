@@ -18,12 +18,12 @@ public interface FlightRepository extends GraphRepository<Flight> {
 
     Collection<Flight> findByDepartureAirportIataCode(String iataCode);
 
-    @Query("MATCH (flight:Flight) "+
+    @Query("MATCH (flight:Flight) " +
             "WHERE flight.scheduledDepartureTime >= {0} AND flight.scheduledDepartureTime < {1} " +
             "RETURN flight ")
     Collection<Flight> findByScheduledDepartureTimeBetween(long timeFromStartDate, long timeFromEndDate);
 
-    @Query("MATCH (flight:Flight) "+
+    @Query("MATCH (flight:Flight) " +
             "WHERE flight.scheduledArrivalTime >= {0} AND flight.scheduledArrivalTime < {1} " +
             "RETURN flight ")
     Collection<Flight> findByScheduledArrivalTimeBetween(long timeFromStartDate, long timeFromEndDate);

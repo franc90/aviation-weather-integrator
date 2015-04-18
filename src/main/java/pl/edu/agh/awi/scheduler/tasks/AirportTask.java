@@ -54,6 +54,10 @@ public abstract class AirportTask<T> {
     }
 
     protected void downloadAndSaveResponse(List<AirPort> airPorts) {
+        if (CollectionUtils.isEmpty(airPorts)) {
+            return;
+        }
+
         StationsBuilder stations = new StationsBuilder();
         airPorts.forEach(e -> stations.addStation(e.getIcaoCode()));
 

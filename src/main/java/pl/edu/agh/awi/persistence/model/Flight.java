@@ -132,9 +132,9 @@ public class Flight {
     public void addDestinationAirPort(AirPort arrivalAirPort) {
         int ordinalNumber = getNextOrdinalNumber();
         DestinationAirPort destinationAirPort = DestinationAirPort.build()
-                                                    .withOrdinalNumber(Long.valueOf(ordinalNumber))
-                                                    .withFlight(this)
-                                                    .withArrivalAirPort(arrivalAirPort);
+                .withOrdinalNumber(Long.valueOf(ordinalNumber))
+                .withFlight(this)
+                .withArrivalAirPort(arrivalAirPort);
         arrivalAirports.add(destinationAirPort);
     }
 

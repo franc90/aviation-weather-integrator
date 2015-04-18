@@ -61,6 +61,7 @@ public class FlightTask extends AbstractHazelcastComponent {
             zone = zoneHelper.loadZone(NORTH_AMERICA);
             loadBalancer = loadBalancer();
         } catch (SchedulerException ex) {
+            logger.info(ex.getMessage());
             return;
         }
 

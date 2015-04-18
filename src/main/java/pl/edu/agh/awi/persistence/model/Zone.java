@@ -14,15 +14,15 @@ public class Zone implements Serializable {
     @GraphId
     private Long id;
 
-    private  String name;
+    private String name;
 
-    private  Double minimalLatitude;
+    private Double minimalLatitude;
 
-    private  Double maximalLatitude;
+    private Double maximalLatitude;
 
-    private  Double minimalLongitude;
+    private Double minimalLongitude;
 
-    private  Double maximalLongitude;
+    private Double maximalLongitude;
 
     @RelatedTo(type = "subzone")
     private Set<Zone> subzones = Sets.newHashSet();
@@ -86,12 +86,12 @@ public class Zone implements Serializable {
         subzones.add(subzone);
     }
 
-    public static class Builder  {
-        private  String name;
-        private  Double minimalLatitude;
-        private  Double maximalLatitude;
-        private  Double minimalLongitude;
-        private  Double maximalLongitude;
+    public static class Builder {
+        private String name;
+        private Double minimalLatitude;
+        private Double maximalLatitude;
+        private Double minimalLongitude;
+        private Double maximalLongitude;
 
         public Builder withName(String name) {
             this.name = name;

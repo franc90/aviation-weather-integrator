@@ -2,17 +2,14 @@ package pl.edu.agh.awi.scheduler.tasks;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 import pl.edu.agh.awi.downloader.weather.metar.generated.Response;
 import pl.edu.agh.awi.persistence.model.AirPort;
 import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
 import pl.edu.agh.awi.scheduler.converter.MetarConverter;
 import pl.edu.agh.awi.scheduler.helper.CronHelper;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 @Component
@@ -35,37 +32,23 @@ public class MetarTask extends AirportTask<Response> {
     @Override
     protected void saveResponse(List<AirPort> airPorts, Response response) {
         Map<String, List<Metar>> metars = MetarConverter.convert(response);
-
-        Set<AirPort> updatedAirPorts = new HashSet<>();
-        metars.forEach((airportIcao, metarList) -> {
-            AirPort airPort = addMetars(airPorts, airportIcao, metarList);
-            if (airPort != null) {
-                updatedAirPorts.add(airPort);
-            }
-        });
-
-        if (!CollectionUtils.isEmpty(updatedAirPorts)) {
-            updatedAirPorts.forEach(persistenceService::saveAirport);
-        }
+        metars.forEach((airportIcao, metarList) -> addMetars(airPorts, airportIcao, metarList));
     }
 
-    private AirPort addMetars(List<AirPort> airPorts, String airportIcao, List<Metar> metarList) {
+    private void addMetars(List<AirPort> airPorts, String airportIcao, List<Metar> metarList) {
         AirPort airPort = getAirPort(airPorts, airportIcao);
         if (airPort == null) {
-            return null;
+            return;
         }
 
-        int airportMetars = airPort.getMetars().size();
         //BETTER ?
         metarList.stream()
                 .filter(
                         metar -> persistenceService.isMetarNotConnectedWithAirPort(metar, airPort))
-                .forEach(airPort::addMetar);
-
-        boolean noNewMetars = airportMetars == airPort.getMetars().size();
-
-        logger.info("Saving new metars? " + noNewMetars);
-        return noNewMetars ? null : airPort;
+                .forEach(m -> {
+                    logger.info("METAR " + airPort.getIataCode() + " - " + m.getTimestamp());
+                    persistenceService.addMetar(airPort, m);
+                });
     }
 
 }
