@@ -1,6 +1,5 @@
 package pl.edu.agh.awi.scheduler.tasks;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -60,7 +59,7 @@ public class TafTask extends AirportTask<Response> {
         //BETTER
         tafs.stream()
                 .filter(
-                        taf -> notContains(airPort, taf))
+                        taf -> persistenceService.isTafNotConnectedWithAirPort(taf, airPort))
                 .forEach(airPort::addTaf);
 
         boolean noNewTafs = airportTafs == airPort.getTafs().size();
@@ -68,15 +67,5 @@ public class TafTask extends AirportTask<Response> {
         logger.info("Saving new tafs? " + noNewTafs);
         return noNewTafs ? null : airPort;
     }
-
-    private boolean notContains(AirPort airPort, Taf taf) {
-        for (Taf t : airPort.getTafs()) {
-            if (DateUtils.isSameInstant(t.getValidFrom(), taf.getValidFrom()) && DateUtils.isSameInstant(t.getValidTo(), taf.getValidTo())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 
 }
