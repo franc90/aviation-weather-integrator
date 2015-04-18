@@ -54,8 +54,11 @@ public class TafTask extends AirportTask<Response> {
         }
 
         int airportTafs = airPort.getTafs().size();
-        //FIXME: is there not a better way to check if taf not already in airport?
-        tafs.stream().filter(taf -> notContains(airPort, taf)).forEach(airPort::addTaf);
+        //BETTER
+        tafs.stream()
+                .filter(
+                        taf -> notContains(airPort, taf))
+                .forEach(airPort::addTaf);
 
         return airportTafs == airPort.getTafs().size() ? null : airPort;
     }
