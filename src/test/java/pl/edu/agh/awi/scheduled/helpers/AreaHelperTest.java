@@ -1,7 +1,7 @@
 package pl.edu.agh.awi.scheduled.helpers;
 
 import org.junit.Test;
-import pl.edu.agh.awi.scheduled.helper.airsigmet.AreaHelper;
+import pl.edu.agh.awi.scheduler.helper.airsigmet.AreaHelper;
 
 import java.awt.geom.Path2D;
 import java.util.Arrays;

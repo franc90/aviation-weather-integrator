@@ -3,12 +3,8 @@ package pl.edu.agh.awi.persistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import pl.edu.agh.awi.persistence.model.Flight;
-import pl.edu.agh.awi.persistence.model.LoadBalancer;
-import pl.edu.agh.awi.persistence.model.Zone;
-import pl.edu.agh.awi.persistence.repositories.FlightRepository;
-import pl.edu.agh.awi.persistence.repositories.LoadBalancerRepository;
-import pl.edu.agh.awi.persistence.repositories.ZoneRepository;
+import pl.edu.agh.awi.persistence.model.*;
+import pl.edu.agh.awi.persistence.repositories.*;
 
 import java.util.Collection;
 
@@ -23,6 +19,12 @@ public class PersistenceService {
 
     @Autowired
     private ZoneRepository zoneRepository;
+
+    @Autowired
+    private AirPortRepository airPortRepository;
+
+    @Autowired
+    private AirLineRepository airLineRepository;
 
     @Transactional(readOnly = true)
     public Collection<Zone> findAllZones() {
@@ -49,4 +51,28 @@ public class PersistenceService {
         return flightRepository.findNotLanded();
     }
 
+    @Transactional(readOnly = true)
+    public Collection<AirPort> findAllAirPorts() {
+        return airPortRepository.findAll().as(Collection.class);
+    }
+
+    @Transactional
+    public void saveAirport(AirPort airPort) {
+        airPortRepository.saveOnly(airPort);
+    }
+
+    @Transactional
+    public AirLine findAirLineByIataCode(String iata) {
+        return airLineRepository.findByIataCode(iata);
+    }
+
+    @Transactional
+    public AirLine findAirLineByIcaoCode(String icao) {
+        return airLineRepository.findByIcaoCode(icao);
+    }
+
+    @Transactional
+    public AirPort findAirPortByIataCode(String iata) {
+        return airPortRepository.findByIataCode(iata);
+    }
 }

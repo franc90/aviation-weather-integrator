@@ -1,7 +1,6 @@
 package pl.edu.agh.awi.loader;
 
 import com.google.common.collect.Lists;
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import com.hazelcast.spring.context.SpringAware;
