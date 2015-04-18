@@ -1,6 +1,5 @@
 package pl.edu.agh.awi.scheduler.tasks;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -57,22 +56,16 @@ public class MetarTask extends AirportTask<Response> {
         }
 
         int airportMetars = airPort.getMetars().size();
-        //FIXME: is there not a better way to check if metar not already in airport?
-        metarList.stream().filter(metar -> notContains(airPort, metar)).forEach(airPort::addMetar);
+        //BETTER ?
+        metarList.stream()
+                .filter(
+                        metar -> persistenceService.isMetarNotConnectedWithAirPort(metar, airPort))
+                .forEach(airPort::addMetar);
 
         boolean noNewMetars = airportMetars == airPort.getMetars().size();
 
         logger.info("Saving new metars? " + noNewMetars);
         return noNewMetars ? null : airPort;
-    }
-
-    private boolean notContains(AirPort airPort, Metar metar) {
-        for (Metar m : airPort.getMetars()) {
-            if (DateUtils.isSameInstant(m.getTimestamp(), metar.getTimestamp())) {
-                return false;
-            }
-        }
-        return true;
     }
 
 }

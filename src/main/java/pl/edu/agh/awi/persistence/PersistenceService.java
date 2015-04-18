@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.awi.persistence.model.*;
+import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
+import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
 import pl.edu.agh.awi.persistence.repositories.*;
 
 import java.util.Collection;
@@ -74,5 +76,15 @@ public class PersistenceService {
     @Transactional
     public AirPort findAirPortByIataCode(String iata) {
         return airPortRepository.findByIataCode(iata);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isMetarNotConnectedWithAirPort(Metar metar, AirPort airPort) {
+        return airPortRepository.countMetarsInAirPort(metar.getTimestamp(), airPort.getIcaoCode()) == 0;
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isTafNotConnectedWithAirPort(Taf taf, AirPort airPort) {
+        return airPortRepository.countTafsInAirPort(taf.getValidFrom(), taf.getValidTo(), airPort.getIcaoCode()) == 0;
     }
 }
