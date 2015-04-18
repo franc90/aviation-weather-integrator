@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 import pl.edu.agh.awi.downloader.exceptions.FlightTaskException;
 import pl.edu.agh.awi.downloader.flights.flightDetails.client.FlightDetailsClient;
 import pl.edu.agh.awi.downloader.flights.flightDetails.data.FlightDetailsResponse;
+import pl.edu.agh.awi.persistence.PersistenceService;
 import pl.edu.agh.awi.persistence.model.Flight;
 import pl.edu.agh.awi.persistence.model.LoadBalancer;
 import pl.edu.agh.awi.persistence.repositories.FlightRepository;
@@ -38,10 +39,7 @@ public class FlightDetailsTask extends AbstractHazelcastTask {
     private FlightDetailsClient client;
 
     @Autowired
-    private LoadBalancerRepository loadBalancerRepository;
-
-    @Autowired
-    private FlightRepository flightRepository;
+    private PersistenceService persistenceService;
 
     @Override
     public void init() {
@@ -66,7 +64,7 @@ public class FlightDetailsTask extends AbstractHazelcastTask {
     }
 
     private LoadBalancer loadBalancer() {
-        Collection<LoadBalancer> loadBalancers = loadBalancerRepository.findAll().as(Collection.class);
+        Collection<LoadBalancer> loadBalancers = persistenceService.findAllLoadBalancers();
 
         if (CollectionUtils.isEmpty(loadBalancers)) {
             throw new FlightTaskException("No loadBalancer");
@@ -79,7 +77,7 @@ public class FlightDetailsTask extends AbstractHazelcastTask {
     }
 
     private void downloadUsingDB(LoadBalancer loadBalancer) {
-        Collection<Flight> dbflights = flightRepository.findNotLanded();
+        Collection<Flight> dbflights = persistenceService.findNotLandedFlights();
 
         List<Flight> purgedFlights = removeOld(dbflights);
         purgedFlights.forEach(f -> download(f, loadBalancer));
@@ -110,7 +108,7 @@ public class FlightDetailsTask extends AbstractHazelcastTask {
         flights
                 .keySet()
                 .forEach(flightId -> {
-                    Flight flight = flightRepository.findByFlightId(flightId);
+                    Flight flight = persistenceService.findFlightByFlightId(flightId);
                     if (flight != null) {
                         download(flight, loadBalancer);
                     }
@@ -131,7 +129,7 @@ public class FlightDetailsTask extends AbstractHazelcastTask {
 
         logger.info("Updating flight " + flight.getFlightId());
         updateFlight(flight, response);
-        flightRepository.save(flight);
+        persistenceService.saveFlight(flight);
 
         if ("landed".equals(flight.getStatus())) {
             updateCaches(flight.getFlightId());
