@@ -3,23 +3,31 @@ package pl.edu.agh.awi.scheduled.tasks;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import pl.edu.agh.awi.downloader.weather.AbstractWeatherClient;
 import pl.edu.agh.awi.downloader.weather.parameters.RequestParameters;
 import pl.edu.agh.awi.downloader.weather.parameters.Stations;
 import pl.edu.agh.awi.downloader.weather.parameters.StationsBuilder;
 import pl.edu.agh.awi.persistence.model.AirPort;
+import pl.edu.agh.awi.persistence.repositories.AirPortRepository;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional
 public abstract class AirportTask<T> {
 
     @Autowired
     private AbstractWeatherClient<T, Stations> client;
 
+    @Autowired
+    protected AirPortRepository airPortRepository;
+
     public abstract int getPortionSize();
+
+    protected abstract void saveResponse(List<AirPort> airPorts, T response);
 
     public void task() {
         List<List<AirPort>> partitionedAirports = loadPartitionedAirports(getPortionSize());
@@ -41,8 +49,8 @@ public abstract class AirportTask<T> {
     }
 
     private List<AirPort> loadAirports() {
-        //TODO: implement when service ready
-        return Collections.emptyList();
+        List<AirPort> airPorts = airPortRepository.findAll().as(List.class);
+        return airPorts;
     }
 
     protected void downloadAndSaveResponse(List<AirPort> airPorts) {
@@ -56,10 +64,6 @@ public abstract class AirportTask<T> {
 
         T response =  client.getResponse(params);
         saveResponse(airPorts, response);
-    }
-
-    protected void saveResponse(List<AirPort> airPorts, T response) {
-        //TODO: implement when service ready
     }
 
 }

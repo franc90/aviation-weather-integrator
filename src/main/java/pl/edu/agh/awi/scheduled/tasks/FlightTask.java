@@ -63,7 +63,7 @@ public class FlightTask extends AbstractHazelcastTask {
         zones = hazelcast.getList("zones");
     }
 
-    @Scheduled(cron = CronHelper.EVERY_QUARTER)
+    @Scheduled(cron = CronHelper.QUATERLY_CRON)
     public void task() {
         Zone zone;
         LoadBalancer loadBalancer;

@@ -4,6 +4,7 @@ import pl.edu.agh.awi.downloader.weather.airsigmet.generated.AIRSIGMET;
 import pl.edu.agh.awi.downloader.weather.airsigmet.generated.Altitude;
 import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
 import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmetType;
+import pl.edu.agh.awi.scheduled.helper.DateHelper;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -38,15 +39,11 @@ public class AirSigmetConverter {
             airsigmet.setType(AirSigmetType.SIGMET);
         }
 
-        airsigmet.setValidFrom(getDate(source.getValidTimeFrom()));
-        airsigmet.setValidTo(getDate(source.getValidTimeTo()));
+        airsigmet.setValidFrom(DateHelper.getDate(source.getValidTimeFrom()));
+        airsigmet.setValidTo(DateHelper.getDate(source.getValidTimeTo()));
 
         return airsigmet;
     }
 
-    private static Date getDate(String date) {
-        LocalDateTime localDateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_ZONED_DATE_TIME);
-        Date returnVal = Date.from(localDateTime.toInstant(ZoneOffset.UTC));
-        return returnVal;
-    }
+
 }
