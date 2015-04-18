@@ -93,7 +93,6 @@ public class AirPortRepositoryTest extends AbstractAviationGraphRepositoryTest<A
         airPort.addMetar(metar);
         airPort.addTaf(taf);
         airPort.addAirSigmet(airSigmet);
-        airPortRepository.save(airPort);
     }
 
     private void saveAirPort() {
