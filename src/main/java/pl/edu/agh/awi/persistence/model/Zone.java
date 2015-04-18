@@ -26,6 +26,17 @@ public class Zone {
     @RelatedTo(type = "subzone")
     private Set<Zone> subzones = Sets.newHashSet();
 
+    public Zone() {
+    }
+
+    private Zone(String name, Double minimalLatitude, Double maximalLatitude, Double minimalLongitude, Double maximalLongitude) {
+        this.name = name;
+        this.minimalLatitude = minimalLatitude;
+        this.maximalLatitude = maximalLatitude;
+        this.minimalLongitude = minimalLongitude;
+        this.maximalLongitude = maximalLongitude;
+    }
+
     public String getName() {
         return name;
     }
@@ -74,4 +85,49 @@ public class Zone {
         subzones.add(subzone);
     }
 
+    public static class Builder  {
+        private  String name;
+        private  Double minimalLatitude;
+        private  Double maximalLatitude;
+        private  Double minimalLongitude;
+        private  Double maximalLongitude;
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withLatitude(Double min, Double max) {
+            this.minimalLatitude = min;
+            this.maximalLatitude = max;
+            return this;
+        }
+
+        public Builder withLongitude(Double min, Double max) {
+            this.minimalLongitude = min;
+            this.maximalLongitude = max;
+            return this;
+        }
+
+        public Zone build() {
+            return new Zone(name, minimalLatitude, maximalLatitude, minimalLongitude, maximalLongitude);
+        }
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Zone zone = (Zone) o;
+
+        return !(id != null ? !id.equals(zone.id) : zone.id != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }
