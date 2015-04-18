@@ -3,13 +3,14 @@ package pl.edu.agh.awi.scheduled.tasks;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import pl.edu.agh.awi.downloader.weather.taf.generated.Response;
 import pl.edu.agh.awi.persistence.model.AirPort;
 import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
 import pl.edu.agh.awi.scheduled.CronHelper;
 import pl.edu.agh.awi.scheduled.converter.TafConverter;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +25,7 @@ public class TafTask extends AirportTask<Response> {
         return PORTION_SIZE;
     }
 
-    @Scheduled(cron = CronHelper.TAF_CRON)
+    @Scheduled(cron = CronHelper.TEST_CRON)
     public void task() {
         super.task();
     }
@@ -33,7 +34,7 @@ public class TafTask extends AirportTask<Response> {
     protected void saveResponse(List<AirPort> airPorts, Response response) {
         Map<String, List<Taf>> tafs = TafConverter.convert(response);
 
-        Set<AirPort> updatedAirPorts = new LinkedHashSet<>();
+        Set<AirPort> updatedAirPorts = new HashSet<>();
         tafs.forEach((airportIcao, tafList) -> {
             AirPort airPort = addTafs(airPorts, airportIcao, tafList);
             if (airPort != null) {
@@ -41,7 +42,9 @@ public class TafTask extends AirportTask<Response> {
             }
         });
 
-        airPortRepository.save(updatedAirPorts);
+        if (!CollectionUtils.isEmpty(updatedAirPorts)) {
+            airPortRepository.save(updatedAirPorts);
+        }
     }
 
     private AirPort addTafs(List<AirPort> airPorts, String airportIcao, List<Taf> tafs) {
@@ -66,14 +69,5 @@ public class TafTask extends AirportTask<Response> {
         return true;
     }
 
-    private AirPort getAirPort(List<AirPort> airPorts, String airportIcao) {
-        for (AirPort airPort : airPorts) {
-            if (airportIcao.equals(airPort.getIcaoCode())) {
-                return airPort;
-            }
-        }
-
-        return null;
-    }
 
 }

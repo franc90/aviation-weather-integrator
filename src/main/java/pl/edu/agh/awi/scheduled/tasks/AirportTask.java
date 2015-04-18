@@ -66,4 +66,14 @@ public abstract class AirportTask<T> {
         saveResponse(airPorts, response);
     }
 
+    protected AirPort getAirPort(List<AirPort> airPorts, String airportIcao) {
+        for (AirPort airPort : airPorts) {
+            if (airportIcao.equals(airPort.getIcaoCode())) {
+                return airPort;
+            }
+        }
+
+        return null;
+    }
+
 }

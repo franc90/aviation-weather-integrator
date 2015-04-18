@@ -14,7 +14,6 @@ public abstract class AbstractWeatherCondition {
     private Double windSpeed;
     private Double windGust;
     private String windDirection;
-    private Double cloudHeight;
     private String percipation;
     private String infoType;
     private Double visibilityStatute;
@@ -83,14 +82,6 @@ public abstract class AbstractWeatherCondition {
 
     public void setWindDirection(String windDirection) {
         this.windDirection = windDirection;
-    }
-
-    public Double getCloudHeight() {
-        return cloudHeight;
-    }
-
-    public void setCloudHeight(Double cloudHeight) {
-        this.cloudHeight = cloudHeight;
     }
 
     public String getInfoType() {

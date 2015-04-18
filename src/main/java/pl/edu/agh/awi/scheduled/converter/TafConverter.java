@@ -1,10 +1,7 @@
 package pl.edu.agh.awi.scheduled.converter;
 
 import org.springframework.util.CollectionUtils;
-import pl.edu.agh.awi.downloader.weather.taf.generated.Forecast;
-import pl.edu.agh.awi.downloader.weather.taf.generated.Response;
-import pl.edu.agh.awi.downloader.weather.taf.generated.SkyCondition;
-import pl.edu.agh.awi.downloader.weather.taf.generated.TAF;
+import pl.edu.agh.awi.downloader.weather.taf.generated.*;
 import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
 import pl.edu.agh.awi.scheduled.helper.DateHelper;
 
@@ -40,12 +37,18 @@ public class TafConverter {
         taf.setValidFrom(DateHelper.getDate(source.getFcstTimeFrom()));
         taf.setValidTo(DateHelper.getDate(source.getFcstTimeTo()));
 
-        if (!CollectionUtils.isEmpty(source.getSkyCondition())) {
-            Integer cloudBaseFtAgl = source.getSkyCondition().get(0).getCloudBaseFtAgl();
-            if (cloudBaseFtAgl != null) {
-                taf.setCloudHeight(cloudBaseFtAgl.doubleValue());
-            }
+        if (!CollectionUtils.isEmpty(source.getIcingCondition())) {
+            source.getIcingCondition().stream().map(TafConverter::convert).forEach(taf::addIcingCondition);
         }
+
+        if (!CollectionUtils.isEmpty(source.getSkyCondition())) {
+            source.getSkyCondition().stream().map(TafConverter::convert).forEach(taf::addSkyCondition);
+        }
+
+        if (!CollectionUtils.isEmpty(source.getTurbulenceCondition())) {
+            source.getTurbulenceCondition().stream().map(TafConverter::convert).forEach(taf::addTurbulenceCondition);
+        }
+
         if (source.getAltimInHg() != null) {
             taf.setPressure(source.getAltimInHg().doubleValue());
         }
@@ -74,5 +77,33 @@ public class TafConverter {
         return taf;
     }
 
+    private static pl.edu.agh.awi.persistence.model.weather_condition.TurbulenceCondition convert(TurbulenceCondition source) {
+        pl.edu.agh.awi.persistence.model.weather_condition.TurbulenceCondition turbulenceCondition = new pl.edu.agh.awi.persistence.model.weather_condition.TurbulenceCondition();
+
+        turbulenceCondition.setTurbulenceIntensity(source.getTurbulenceIntensity());
+        turbulenceCondition.setTurbulenceMaxAltitude(source.getTurbulenceMaxAltFtAgl());
+        turbulenceCondition.setTurbulenceMinAltitude(source.getTurbulenceMinAltFtAgl());
+
+        return turbulenceCondition;
+    }
+
+    private static pl.edu.agh.awi.persistence.model.weather_condition.IcingCondition convert(IcingCondition source) {
+        pl.edu.agh.awi.persistence.model.weather_condition.IcingCondition icingCondition = new pl.edu.agh.awi.persistence.model.weather_condition.IcingCondition();
+
+        icingCondition.setIcingIntensity(source.getIcingIntensity());
+        icingCondition.setIcingMaxAltitude(source.getIcingMaxAltFtAgl());
+        icingCondition.setIcingMinAltitude(source.getIcingMinAltFtAgl());
+
+        return icingCondition;
+    }
+
+    public static pl.edu.agh.awi.persistence.model.weather_condition.SkyCondition convert(SkyCondition source) {
+        pl.edu.agh.awi.persistence.model.weather_condition.SkyCondition skyCondition = new pl.edu.agh.awi.persistence.model.weather_condition.SkyCondition();
+
+        skyCondition.setCloudBase(source.getCloudBaseFtAgl());
+        skyCondition.setSkyCover(source.getSkyCover());
+
+        return skyCondition;
+    }
 
 }
