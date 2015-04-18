@@ -3,7 +3,7 @@ package pl.edu.agh.awi.scheduled.helpers;
 import org.junit.Test;
 import pl.edu.agh.awi.downloader.weather.airsigmet.generated.Area;
 import pl.edu.agh.awi.downloader.weather.airsigmet.generated.Point;
-import pl.edu.agh.awi.scheduled.helper.airsigmet.PathHelper;
+import pl.edu.agh.awi.scheduler.helper.airsigmet.PathHelper;
 
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;

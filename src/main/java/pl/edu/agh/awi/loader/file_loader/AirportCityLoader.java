@@ -53,8 +53,8 @@ public class AirportCityLoader implements FileLoader<String> {
             cities = Stream.of(read.split("\n"))
                     .filter(e -> e.split(SEPARATOR).length == 2)
                     .collect(Collectors.toMap(
-                            (String e) -> e.split(SEPARATOR)[0],
-                            (String e) -> e.split(SEPARATOR)[1])
+                                    (String e) -> e.split(SEPARATOR)[0],
+                                    (String e) -> e.split(SEPARATOR)[1])
                     );
         } catch (IOException e) {
             e.printStackTrace();

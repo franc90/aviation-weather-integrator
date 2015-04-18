@@ -22,7 +22,6 @@ public class Application implements CommandLineRunner {
     }
 
     @Override
-    @Transactional
     public void run(String[] args) throws Exception {
         loaders.forEach(e -> e.loadData());
     }
