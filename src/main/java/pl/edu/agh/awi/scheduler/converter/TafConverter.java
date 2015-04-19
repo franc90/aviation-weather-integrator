@@ -37,48 +37,55 @@ public class TafConverter {
         taf.setValidFrom(DateHelper.getDate(source.getFcstTimeFrom()));
         taf.setValidTo(DateHelper.getDate(source.getFcstTimeTo()));
 
-        if (!CollectionUtils.isEmpty(source.getIcingCondition())) {
-            source.getIcingCondition().stream().map(TafConverter::convert).forEach(taf::addIcingCondition);
-        }
+        Optional<Forecast> optional = Optional.ofNullable(source);
 
-        if (!CollectionUtils.isEmpty(source.getSkyCondition())) {
-            source.getSkyCondition().stream().map(TafConverter::convert).forEach(taf::addSkyCondition);
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getIcingCondition()))
+                .ifPresent(val ->val
+                        .stream()
+                        .map(TafConverter::convert)
+                        .forEach(taf::addIcingCondition));
 
-        if (!CollectionUtils.isEmpty(source.getTurbulenceCondition())) {
-            source.getTurbulenceCondition().stream().map(TafConverter::convert).forEach(taf::addTurbulenceCondition);
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getSkyCondition()))
+                .ifPresent(val ->val
+                        .stream()
+                        .map(TafConverter::convert)
+                        .forEach(taf::addSkyCondition));
 
-        if (source.getAltimInHg() != null) {
-            taf.setPressure(source.getAltimInHg().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getTurbulenceCondition()))
+                .ifPresent(val -> val
+                        .stream()
+                        .map(TafConverter::convert)
+                        .forEach(taf::addTurbulenceCondition));
 
-        if (!CollectionUtils.isEmpty(source.getTemperature())) {
-            Float surfaceTemp = source.getTemperature().get(0).getSfcTempC();
-            if (surfaceTemp != null) {
-                taf.setTemperature(surfaceTemp.doubleValue());
-            }
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getAltimInHg()))
+                .map(Float::doubleValue)
+                .ifPresent(taf::setPressure);
 
-        if (source.getVertVisFt() != null) {
-            taf.setVerticalVisibility(source.getVertVisFt().intValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getTemperature()))
+                .ifPresent(val -> val.stream()
+                        .mapToDouble(Temperature::getSfcTempC)
+                        .min()
+                        .ifPresent(taf::setTemperature));
 
-        if (source.getVisibilityStatuteMi() != null) {
-            taf.setVisibilityStatute(source.getVisibilityStatuteMi().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getVertVisFt()))
+                .map(Short::intValue)
+                .ifPresent(taf::setVerticalVisibility);
 
-        if (source.getWindDirDegrees() != null) {
-            taf.setWindDirection(source.getWindDirDegrees().toString());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getVisibilityStatuteMi()))
+                .map(Float::doubleValue)
+                .ifPresent(taf::setVisibilityStatute);
 
-        if (source.getWindGustKt() != null) {
-            taf.setWindGust(source.getWindGustKt().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getWindDirDegrees()))
+                .map(String::valueOf)
+                .ifPresent(taf::setWindDirection);
 
-        if (source.getWindSpeedKt() != null) {
-            taf.setWindSpeed(source.getWindSpeedKt().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getWindGustKt()))
+                .map(Integer::doubleValue)
+                .ifPresent(taf::setWindGust);
+
+        optional.flatMap(o -> Optional.ofNullable(o.getWindSpeedKt()))
+                .map(Integer::doubleValue)
+                .ifPresent(taf::setWindSpeed);
 
         return taf;
     }

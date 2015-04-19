@@ -12,10 +12,13 @@ import pl.edu.agh.awi.persistence.repositories.ZoneRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Component
 @SpringAware
 public class ZonesLoader extends AbstractLoader<ZoneResponse, pl.edu.agh.awi.downloader.flights.zone.data.Zone, Zone> {
+
+    private static final Logger logger = Logger.getLogger("ZonesLoader");
 
     private static final String CACHED_ZONES = "zones";
 
@@ -33,6 +36,7 @@ public class ZonesLoader extends AbstractLoader<ZoneResponse, pl.edu.agh.awi.dow
         List<Zone> zones = converter.convert(response.getZones());
         Iterable<Zone> savedZones = zoneRepository.save(zones);
         cacheZones(savedZones);
+        logger.info("Zones loaded");
     }
 
     private void cacheZones(Iterable<Zone> zones) {

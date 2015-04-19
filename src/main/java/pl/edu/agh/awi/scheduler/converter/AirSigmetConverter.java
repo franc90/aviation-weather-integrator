@@ -6,6 +6,8 @@ import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
 import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmetType;
 import pl.edu.agh.awi.scheduler.helper.DateHelper;
 
+import java.util.Optional;
+
 public class AirSigmetConverter {
 
     private static final String AIRMET = "airmet";
@@ -17,23 +19,22 @@ public class AirSigmetConverter {
         airsigmet.setValidTo(DateHelper.getDate(source.getValidTimeTo()));
         airsigmet.setHazard(HazardConverter.convert(source.getHazard()));
 
-        if (source.getAltitude() != null) {
-            Altitude altitude = source.getAltitude();
-            if (altitude.getMinFtMsl() != null) {
-                airsigmet.setMinAltitude(altitude.getMinFtMsl().doubleValue());
-            }
-            if (altitude.getMaxFtMsl() != null) {
-                airsigmet.setMaxAltitude(altitude.getMaxFtMsl().doubleValue());
-            }
-        }
+        Optional<AIRSIGMET> optional = Optional.ofNullable(source);
 
-        if (source.getMovementDirDegrees() != null) {
-            airsigmet.setMovementDirection(String.valueOf(source.getMovementDirDegrees()));
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getAltitude()))
+                .flatMap(o -> Optional.ofNullable(o.getMinFtMsl()))
+                .ifPresent(val -> airsigmet.setMinAltitude(val.doubleValue()));
 
-        if (source.getMovementSpeedKt() != null) {
-            airsigmet.setMovementSpeed(source.getMovementSpeedKt().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getAltitude()))
+                .flatMap(o -> Optional.ofNullable(o.getMaxFtMsl()))
+                .ifPresent(val -> airsigmet.setMaxAltitude(val.doubleValue()));
+
+        optional.flatMap(o -> Optional.ofNullable(o.getMovementDirDegrees()))
+                .ifPresent(val -> airsigmet.setMovementDirection(val.toString()));
+
+        optional.flatMap(o -> Optional.ofNullable(o.getMovementSpeedKt()))
+                .ifPresent(val -> airsigmet.setMovementSpeed(val.doubleValue()));
+
 
         if (AIRMET.equalsIgnoreCase(source.getAirsigmetType())) {
             airsigmet.setType(AirSigmetType.AIRMET);
@@ -43,6 +44,5 @@ public class AirSigmetConverter {
 
         return airsigmet;
     }
-
 
 }

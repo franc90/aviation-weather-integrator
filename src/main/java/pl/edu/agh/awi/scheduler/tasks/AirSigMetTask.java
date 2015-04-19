@@ -26,6 +26,7 @@ import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -45,12 +46,14 @@ public class AirSigMetTask {
     @Autowired
     private ZoneHelper zoneHelper;
 
-    @Scheduled(cron = CronHelper.AIRSIGMET_CRON)
+    @Scheduled(cron = CronHelper.TEST_CRON)
     public void task() {
         try {
             Response response = getResponse();
             List<AirPort> airPorts = loadAirports();
-            convertAndSave(response, airPorts);
+            if (!CollectionUtils.isEmpty(airPorts)) {
+                convertAndSave(response, airPorts);
+            }
         } catch (SchedulerException ex) {
             logger.info(ex.getMessage());
         }
@@ -77,23 +80,18 @@ public class AirSigMetTask {
     }
 
     private void convertAndSave(Response response, List<AirPort> airPorts) {
-        if (checkAirsigmetsExist(response) || CollectionUtils.isEmpty(airPorts)) {
-            return;
-        }
-
-        List<AIRSIGMET> airsigmets = response.getData().getAIRSIGMET();
-        airsigmets.forEach(e -> convertAndSave(e, airPorts));
-    }
-
-    private boolean checkAirsigmetsExist(Response response) {
-        return response == null || response.getData() == null || CollectionUtils.isEmpty(response.getData().getAIRSIGMET());
+        Optional
+                .ofNullable(response)
+                .flatMap(o -> Optional.ofNullable(o.getData()))
+                .flatMap(o -> Optional.ofNullable(o.getAIRSIGMET()))
+                .ifPresent(airsigmets -> airsigmets.forEach(airsigmet -> convertAndSave(airsigmet, airPorts)));
     }
 
     private void convertAndSave(AIRSIGMET airsigmet, List<AirPort> airPorts) {
         List<AirPort> airsigmetAirports = getRelevantAirports(airsigmet, airPorts);
         AirSigmet airSigmet = AirSigmetConverter.convert(airsigmet);
 
-        logger.info("Saving airsigmet " + getAirsigmetName(airSigmet) + " for " + airsigmetAirports.size());
+        logger.info("Saving airsigmet " + getAirsigmetName(airSigmet) + " for " + airsigmetAirports.size() + " airports");
         airsigmetAirports.forEach(airport -> persistenceService.addAirsigmet(airport, airSigmet));
     }
 

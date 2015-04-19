@@ -10,6 +10,7 @@ import pl.edu.agh.awi.scheduler.helper.CronHelper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Component
@@ -24,7 +25,7 @@ public class TafTask extends AirportTask<Response> {
         return PORTION_SIZE;
     }
 
-    @Scheduled(cron = CronHelper.TAF_CRON)
+    @Scheduled(cron = CronHelper.TEST_CRON)
     public void task() {
         super.task();
     }
@@ -36,19 +37,16 @@ public class TafTask extends AirportTask<Response> {
     }
 
     private void addTafs(List<AirPort> airPorts, String airportIcao, List<Taf> tafs) {
-        AirPort airPort = getAirPort(airPorts, airportIcao);
-        if (airPort == null) {
-            return;
-        }
+        Optional<AirPort> airPortOptional = Optional.ofNullable(getAirPort(airPorts, airportIcao));
 
-        //BETTER
-        tafs.stream()
-                .filter(
-                        taf -> persistenceService.isTafNotConnectedWithAirPort(taf, airPort))
-                .forEach(t -> {
-                    logger.info("TAF " + airPort.getIataCode() + " - " + t.getValidFrom());
-                    persistenceService.addTaf(airPort, t);
-                });
+        airPortOptional.ifPresent(airPort ->
+                tafs.stream()
+                        .filter(
+                                taf -> persistenceService.isTafNotConnectedWithAirPort(taf, airPort))
+                        .forEach(t -> {
+                            logger.info("TAF " + airPort.getIataCode() + " - " + t.getValidFrom());
+                            persistenceService.addTaf(airPort, t);
+                        }));
 
     }
 
