@@ -25,7 +25,7 @@ public class MetarTask extends AirportTask<Response> {
         return PORTION_SIZE;
     }
 
-    @Scheduled(cron = CronHelper.TEST_CRON)
+    @Scheduled(cron = CronHelper.METAR_CRON)
     public void task() {
         super.task();
     }

@@ -1,7 +1,6 @@
 package pl.edu.agh.awi.scheduler.converter;
 
 import pl.edu.agh.awi.downloader.weather.airsigmet.generated.AIRSIGMET;
-import pl.edu.agh.awi.downloader.weather.airsigmet.generated.Altitude;
 import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
 import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmetType;
 import pl.edu.agh.awi.scheduler.helper.DateHelper;

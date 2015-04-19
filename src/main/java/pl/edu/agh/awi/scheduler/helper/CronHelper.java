@@ -8,7 +8,7 @@ public interface CronHelper {
 
     String FLIGHT_DETAIL_CRON = "* 5/15 * 1 * ?";
 
-    String METAR_CRON =  "* 12 */1 * * *";
+    String METAR_CRON = "* 12 */1 * * *";
 
     String TAF_CRON = "* 26 */6 * * *";
 

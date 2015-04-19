@@ -25,7 +25,7 @@ public class TafTask extends AirportTask<Response> {
         return PORTION_SIZE;
     }
 
-    @Scheduled(cron = CronHelper.TEST_CRON)
+    @Scheduled(cron = CronHelper.TAF_CRON)
     public void task() {
         super.task();
     }

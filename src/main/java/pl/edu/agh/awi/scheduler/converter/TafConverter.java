@@ -40,13 +40,13 @@ public class TafConverter {
         Optional<Forecast> optional = Optional.ofNullable(source);
 
         optional.flatMap(o -> Optional.ofNullable(o.getIcingCondition()))
-                .ifPresent(val ->val
+                .ifPresent(val -> val
                         .stream()
                         .map(TafConverter::convert)
                         .forEach(taf::addIcingCondition));
 
         optional.flatMap(o -> Optional.ofNullable(o.getSkyCondition()))
-                .ifPresent(val ->val
+                .ifPresent(val -> val
                         .stream()
                         .map(TafConverter::convert)
                         .forEach(taf::addSkyCondition));

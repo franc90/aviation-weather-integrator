@@ -46,7 +46,7 @@ public class AirSigMetTask {
     @Autowired
     private ZoneHelper zoneHelper;
 
-    @Scheduled(cron = CronHelper.TEST_CRON)
+    @Scheduled(cron = CronHelper.AIRSIGMET_CRON)
     public void task() {
         try {
             Response response = getResponse();
