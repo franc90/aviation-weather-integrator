@@ -49,7 +49,7 @@ public class AirportCityLoader implements FileLoader<String> {
             File file = FileUtils.toFile(getClass().getResource(RUNWAYS_CSV));
             String read = FileUtils.readFileToString(file, ENCODING);
 
-            cities = Stream.of(read.split("\n"))
+            cities = Stream.of(read.split(System.lineSeparator()))
                     .filter(e -> e.split(SEPARATOR).length == 2)
                     .collect(Collectors.toMap(
                                     (String e) -> e.split(SEPARATOR)[0],

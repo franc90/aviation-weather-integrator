@@ -48,7 +48,9 @@ public class RunwaysLoader implements FileLoader<Long> {
             File file = FileUtils.toFile(getClass().getResource(RUNWAYS_CSV));
             String read = FileUtils.readFileToString(file, ENCODING);
 
-            runways = Stream.of(read.split("\n")).collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+            runways = Stream
+                    .of(read.split(System.lineSeparator()))
+                    .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
         } catch (IOException e) {
             e.printStackTrace();
         }
