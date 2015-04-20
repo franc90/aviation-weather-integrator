@@ -31,7 +31,10 @@ public abstract class AirportTask<T> {
 
     public void task() {
         List<List<AirPort>> partitionedAirports = loadPartitionedAirports(getPortionSize());
-        partitionedAirports.stream().forEach(this::downloadAndSaveResponse);
+        partitionedAirports
+                .stream()
+                .filter(v -> !v.isEmpty())
+                .forEach(this::downloadAndSaveResponse);
     }
 
     protected List<List<AirPort>> loadPartitionedAirports(int partitionSize) {
@@ -54,10 +57,6 @@ public abstract class AirportTask<T> {
     }
 
     protected void downloadAndSaveResponse(List<AirPort> airPorts) {
-        if (CollectionUtils.isEmpty(airPorts)) {
-            return;
-        }
-
         StationsBuilder stations = new StationsBuilder();
         airPorts.forEach(e -> stations.addStation(e.getIcaoCode()));
 

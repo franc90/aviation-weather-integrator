@@ -43,37 +43,38 @@ public class MetarConverter {
         metar.setVerticalVisibility(source.getVertVisFt());
         metar.setInfoType(source.getMetarType());
 
-        if (!CollectionUtils.isEmpty(source.getSkyCondition())) {
-            source.getSkyCondition().stream().map(MetarConverter::convert).forEach(metar::addSkyCondition);
-        }
+        Optional<METAR> optional = Optional.ofNullable(source);
 
-        if (source.getDewpointC() != null) {
-            metar.setDewPointTemperature(source.getDewpointC().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getSkyCondition()))
+                .ifPresent(val -> val.stream().map(MetarConverter::convert).forEach(metar::addSkyCondition));
 
-        if (source.getSeaLevelPressureMb() != null) {
-            metar.setPressure(source.getSeaLevelPressureMb().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getDewpointC()))
+                .map(Float::doubleValue)
+                .ifPresent(metar::setDewPointTemperature);
 
-        if (source.getTempC() != null) {
-            metar.setTemperature(source.getTempC().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getSeaLevelPressureMb()))
+                .map(Float::doubleValue)
+                .ifPresent(metar::setPressure);
 
-        if (source.getVisibilityStatuteMi() != null) {
-            metar.setVisibilityStatute(source.getVisibilityStatuteMi().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getTempC()))
+                .map(Float::doubleValue)
+                .ifPresent(metar::setTemperature);
 
-        if (source.getWindDirDegrees() != null) {
-            metar.setWindDirection(source.getWindDirDegrees().toString());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getVisibilityStatuteMi()))
+                .map(Float::doubleValue)
+                .ifPresent(metar::setVisibilityStatute);
 
-        if (source.getWindGustKt() != null) {
-            metar.setWindGust(source.getWindGustKt().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getWindDirDegrees()))
+                .map(String::valueOf)
+                .ifPresent(metar::setWindDirection);
 
-        if (source.getWindSpeedKt() != null) {
-            metar.setWindSpeed(source.getWindSpeedKt().doubleValue());
-        }
+        optional.flatMap(o -> Optional.ofNullable(o.getWindGustKt()))
+                .map(Integer::doubleValue)
+                .ifPresent(metar::setWindGust);
+
+        optional.flatMap(o -> Optional.ofNullable(o.getWindSpeedKt()))
+                .map(Integer::doubleValue)
+                .ifPresent(metar::setWindSpeed);
 
         return metar;
     }

@@ -10,6 +10,7 @@ import pl.edu.agh.awi.scheduler.helper.CronHelper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Component
@@ -36,19 +37,16 @@ public class MetarTask extends AirportTask<Response> {
     }
 
     private void addMetars(List<AirPort> airPorts, String airportIcao, List<Metar> metarList) {
-        AirPort airPort = getAirPort(airPorts, airportIcao);
-        if (airPort == null) {
-            return;
-        }
+        Optional<AirPort> airPortOptional = Optional.ofNullable(getAirPort(airPorts, airportIcao));
 
-        //BETTER ?
-        metarList.stream()
-                .filter(
-                        metar -> persistenceService.isMetarNotConnectedWithAirPort(metar, airPort))
-                .forEach(m -> {
-                    logger.info("METAR " + airPort.getIataCode() + " - " + m.getTimestamp());
-                    persistenceService.addMetar(airPort, m);
-                });
+        airPortOptional.ifPresent(airport ->
+                metarList.stream()
+                        .filter(
+                                metar -> persistenceService.isMetarNotConnectedWithAirPort(metar, airport))
+                        .forEach(m -> {
+                            logger.info("METAR " + airport.getIataCode() + " - " + m.getTimestamp());
+                            persistenceService.addMetar(airport, m);
+                        }));
     }
 
 }
