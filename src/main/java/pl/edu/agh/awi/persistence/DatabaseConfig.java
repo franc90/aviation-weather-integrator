@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DatabaseConfig {
 
-    private static final String DB = "data/awi.db";
+    private static final String DB = "data/awi";
 
     @Bean
     GraphDatabaseService graphDatabaseService() {
