@@ -41,7 +41,6 @@ dependencies {
     compile 'javax.el:javax.el-api:2.2.4'
     compile 'com.hazelcast:hazelcast:3.4.2'
     compile 'com.hazelcast:hazelcast-spring:3.4.2'
-    compile 'org.springframework.data:spring-data-neo4j-rest:3.3.0.RELEASE'
 }
 
 task wrapper(type: Wrapper) {
