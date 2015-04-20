@@ -12,3 +12,6 @@ data
 build
 .idea/
 *.iml
+
+#log file
+aws.log
