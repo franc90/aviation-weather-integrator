@@ -16,10 +16,9 @@ import java.util.stream.Stream;
 public class AirportCityLoader implements FileLoader<String> {
 
     private static final String RUNWAYS_CSV = "/airport/airportCities.csv";
-
-    public static final String NO_DATA = "";
-
-    public static final String SEPARATOR = ",";
+    private static final String NO_DATA = "";
+    private static final String SEPARATOR = ",";
+    private static final String ENCODING = "UTF-8";
 
     private Map<String, String> cities;
 
@@ -48,7 +47,7 @@ public class AirportCityLoader implements FileLoader<String> {
     private void loadRunways() {
         try {
             File file = FileUtils.toFile(getClass().getResource(RUNWAYS_CSV));
-            String read = FileUtils.readFileToString(file);
+            String read = FileUtils.readFileToString(file, ENCODING);
 
             cities = Stream.of(read.split("\n"))
                     .filter(e -> e.split(SEPARATOR).length == 2)

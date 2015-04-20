@@ -16,8 +16,8 @@ import java.util.stream.Stream;
 public class RunwaysLoader implements FileLoader<Long> {
 
     private static final String RUNWAYS_CSV = "/airport/runways.csv";
-
-    public static final long NO_DATA = 0L;
+    private static final long NO_DATA = 0L;
+    private static final String ENCODING = "UTF-8";
 
     private Map<String, Long> runways;
 
@@ -46,7 +46,7 @@ public class RunwaysLoader implements FileLoader<Long> {
     private void loadRunways() {
         try {
             File file = FileUtils.toFile(getClass().getResource(RUNWAYS_CSV));
-            String read = FileUtils.readFileToString(file);
+            String read = FileUtils.readFileToString(file, ENCODING);
 
             runways = Stream.of(read.split("\n")).collect(Collectors.groupingBy(e -> e, Collectors.counting()));
         } catch (IOException e) {
