@@ -12,11 +12,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import pl.edu.agh.awi.downloader.flights.flight.data.Flight;
+import pl.edu.agh.awi.persistence.PersistenceService;
 import pl.edu.agh.awi.persistence.model.AirLine;
 import pl.edu.agh.awi.persistence.model.AirPort;
 import pl.edu.agh.awi.persistence.model.DestinationAirPort;
-import pl.edu.agh.awi.persistence.repositories.AirLineRepository;
-import pl.edu.agh.awi.persistence.repositories.AirPortRepository;
 import pl.edu.agh.awi.scheduler.exception.SchedulerException;
 
 import java.util.Set;
@@ -48,27 +47,17 @@ public class FlightPersistenceConverterTest {
     static class ContextConfiguration {
 
         @Bean
-        public AirPortRepository airPortRepository() {
-            AirPortRepository airPortRepository = Mockito.mock(AirPortRepository.class);
-            return airPortRepository;
+        public PersistenceService persistenceService() {
+            PersistenceService persistenceService = Mockito.mock(PersistenceService.class);
+            return persistenceService;
         }
-
-        @Bean
-        public AirLineRepository airLineRepository() {
-            AirLineRepository airLineRepository = Mockito.mock(AirLineRepository.class);
-            return airLineRepository;
-        }
-
     }
 
     @Autowired
     private FlightPersistenceConverter converter;
 
     @Autowired
-    private AirPortRepository airPortRepository;
-
-    @Autowired
-    private AirLineRepository airLineRepository;
+    private PersistenceService persistenceService;
 
     private Flight source;
 
@@ -108,22 +97,22 @@ public class FlightPersistenceConverterTest {
 
     @Test(expected = SchedulerException.class)
     public void shouldThrowFlightTaskExcetpion() {
-        when(airLineRepository.findByIataCode(anyString())).thenReturn(delta);
-        when(airPortRepository.findByIcaoCode(KRK_ICAO)).thenReturn(null);
-        when(airPortRepository.findByIcaoCode(JFK_ICAO)).thenReturn(null);
-        when(airPortRepository.findByIataCode(KRK_IATA)).thenReturn(null);
-        when(airPortRepository.findByIataCode(JFK_IATA)).thenReturn(null);
+        when(persistenceService.findAirLineByIataCode(anyString())).thenReturn(delta);
+        when(persistenceService.findAirPortByIataCode(KRK_ICAO)).thenReturn(null);
+        when(persistenceService.findAirPortByIataCode(JFK_ICAO)).thenReturn(null);
+        when(persistenceService.findAirPortByIataCode(KRK_IATA)).thenReturn(null);
+        when(persistenceService.findAirPortByIataCode(JFK_IATA)).thenReturn(null);
 
         converter.convert(source);
     }
 
     @Test
     public void shouldConvertSingleFlight() {
-        when(airLineRepository.findByIataCode(anyString())).thenReturn(delta);
-        when(airPortRepository.findByIcaoCode(KRK_ICAO)).thenReturn(krk);
-        when(airPortRepository.findByIcaoCode(JFK_ICAO)).thenReturn(jfk);
-        when(airPortRepository.findByIataCode(KRK_IATA)).thenReturn(krk);
-        when(airPortRepository.findByIataCode(JFK_IATA)).thenReturn(jfk);
+        when(persistenceService.findAirLineByIataCode(anyString())).thenReturn(delta);
+        when(persistenceService.findAirPortByIataCode(KRK_ICAO)).thenReturn(krk);
+        when(persistenceService.findAirPortByIataCode(JFK_ICAO)).thenReturn(jfk);
+        when(persistenceService.findAirPortByIataCode(KRK_IATA)).thenReturn(krk);
+        when(persistenceService.findAirPortByIataCode(JFK_IATA)).thenReturn(jfk);
 
         pl.edu.agh.awi.persistence.model.Flight flight = converter.convert(source);
 
