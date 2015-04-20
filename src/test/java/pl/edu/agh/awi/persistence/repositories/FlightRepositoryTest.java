@@ -96,6 +96,12 @@ public class FlightRepositoryTest {
     }
 
     @Test
+    public void shouldFindNotLandedFlights() {
+        Collection<Flight> flights = flightRepository.findNotLanded();
+        assertTrue(flights.contains(existingFlight));
+    }
+
+    @Test
     public void shouldFindByAirLineIcaoCode() {
         assertFlights(flightRepository::findByAirLineIcaoCode, airLine.getIcaoCode());
     }

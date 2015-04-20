@@ -1,0 +1,20 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hz="http://www.hazelcast.com/schema/spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.hazelcast.com/schema/spring
+                http://www.hazelcast.com/schema/spring/hazelcast-spring.xsd">
+
+    <hz:hazelcast id="hazelcast">
+        <hz:config>
+            <hz:properties>
+                <hz:property name="hazelcast.shutdownhook.enabled">false</hz:property>
+            </hz:properties>
+            <hz:map name="flights"/>
+            <hz:map name="finishedFlights"/>
+            <hz:list name="zones"/>
+        </hz:config>
+    </hz:hazelcast>
+
+</beans>

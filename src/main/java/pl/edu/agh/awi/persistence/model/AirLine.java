@@ -17,7 +17,7 @@ public class AirLine {
     @Indexed
     private String name;
 
-    @Indexed
+    @Indexed(unique = true)
     private String iataCode;
 
     @Indexed

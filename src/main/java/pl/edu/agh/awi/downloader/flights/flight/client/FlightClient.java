@@ -1,5 +1,6 @@
 package pl.edu.agh.awi.downloader.flights.flight.client;
 
+import org.springframework.stereotype.Component;
 import pl.edu.agh.awi.downloader.flights.AbstractFlightsClient;
 import pl.edu.agh.awi.downloader.flights.flight.data.FlightResponse;
 import pl.edu.agh.awi.downloader.flights.flight.data.converter.FlightResponseConverter;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 import static java.text.MessageFormat.format;
 
+@Component
 public class FlightClient extends AbstractFlightsClient<FlightResponse, HashMap<String, Object>> {
 
     private static final String URL = "http://{0}/zones/fcgi/{1}_all.json";

@@ -13,7 +13,7 @@ public class AirSigmet {
     @GraphId
     private Long id;
 
-    private Date timestamp  = new Date();
+    private Date timestamp = new Date();
     private Date validFrom;
     private Date validTo;
     private Double minAltitude;
@@ -21,7 +21,7 @@ public class AirSigmet {
     private String movementDirection;
     private Double movementSpeed;
 
-    @RelatedTo(type ="hazard")
+    @RelatedTo(type = "hazard")
     @Fetch
     private Hazard hazard;
 

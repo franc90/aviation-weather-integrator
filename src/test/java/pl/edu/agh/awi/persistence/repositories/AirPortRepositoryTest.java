@@ -1,5 +1,6 @@
 package pl.edu.agh.awi.persistence.repositories;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.awi.persistence.PersistenceConfig;
 import pl.edu.agh.awi.persistence.TestDatabaseConfig;
-import pl.edu.agh.awi.persistence.model.AirLine;
 import pl.edu.agh.awi.persistence.model.AirPort;
 import pl.edu.agh.awi.persistence.model.Flight;
 import pl.edu.agh.awi.persistence.model.ModelBuilder;
@@ -37,6 +36,7 @@ public class AirPortRepositoryTest extends AbstractAviationGraphRepositoryTest<A
     private static final Date VALID_TO =  new Date();
     public static final Double LATITUDE = Double.valueOf("13.3");
     private static final String NAME_PROPERTY = "name";
+    private static final String ICAO_CODE = "SOME_CODE";
 
     @Autowired
     private AirPortRepository airPortRepository;
@@ -44,10 +44,30 @@ public class AirPortRepositoryTest extends AbstractAviationGraphRepositoryTest<A
     @Autowired
     private Neo4jTemplate neo4jTemplate;
 
-    @Test
-    @Transactional
-    public void shouldSaveAirPortWithoutRelations() {
+    @Before
+    public void initDatabase() {
+        super.initDatabase();
         saveAirPort();
+    }
+
+    @Test
+    public void shouldCountMetarsInAirPortByIcaoAndTimestamp() {
+        addRelations();
+        Integer expectedCount = 1;
+        Integer count = airPortRepository.countMetarsInAirPort(TIMESTAMP, ICAO_CODE);
+        assertEquals(expectedCount, count);
+    }
+
+    @Test
+    public void shouldCountTafsInAirPortByIcaoAndValidFromAndValidTo() {
+        addRelations();
+        Integer expectedCount = 1;
+        Integer count = airPortRepository.countTafsInAirPort(VALID_FROM, VALID_TO, ICAO_CODE);
+        assertEquals(expectedCount, count);
+    }
+
+    @Test
+    public void shouldSaveAirPortWithoutRelations() {
         AirPort airPortFromDB = findAirPortByName();
         assertEmptyRelations(Metar.class, Taf.class, Flight.class);
         assertEquals(AIR_PORT_NAME, airPortFromDB.getName());
@@ -55,9 +75,7 @@ public class AirPortRepositoryTest extends AbstractAviationGraphRepositoryTest<A
     }
 
     @Test
-    @Transactional
     public void shouldUpdateAirPortWithWeatherRelations() {
-        saveAirPort();
         addRelations();
         AirPort airPortFromDB = findAirPortByName();
         neo4jTemplate.fetch(airPortFromDB.getMetars());
@@ -75,13 +93,13 @@ public class AirPortRepositoryTest extends AbstractAviationGraphRepositoryTest<A
         airPort.addMetar(metar);
         airPort.addTaf(taf);
         airPort.addAirSigmet(airSigmet);
-        airPortRepository.save(airPort);
     }
 
     private void saveAirPort() {
         AirPort airPort  = ModelBuilder.build(AirPort::new, a -> {
             a.setName(AIR_PORT_NAME);
             a.setLatitude(LATITUDE);
+            a.setIcaoCode(ICAO_CODE);
 
         });
         airPortRepository.saveOnly(airPort);
@@ -100,6 +118,7 @@ public class AirPortRepositoryTest extends AbstractAviationGraphRepositoryTest<A
     private Metar createMetar() {
         Metar metar = new Metar();
         metar.setInfoType(METAR);
+        metar.setTimestamp(TIMESTAMP);
         return metar;
     }
 
