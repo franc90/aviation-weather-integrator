@@ -1,5 +1,6 @@
 package pl.edu.agh.awi.downloader.flights.flightDetails.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import pl.edu.agh.awi.downloader.flights.flightDetails.CustomDateDeserializer;
@@ -7,6 +8,7 @@ import pl.edu.agh.awi.downloader.flights.flightDetails.CustomDateDeserializer;
 import java.util.Date;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FlightDetailsResponse {
 
     private final String fightId;
@@ -49,45 +51,11 @@ public class FlightDetailsResponse {
 
     private final String originTimezoneName;
 
-    private final String realIata;
-
-    private final String realCity;
-
-    private final List<Double> realCoords;
-
-    private final String realTimezoneCode;
-
-    private final double realTimezoneOffset;
-
-    private final String realTimezoneName;
-
     private final String airline;
 
     private final String aircraft;
 
     private final List<Double> trail;
-
-    // Not used
-
-    private final String snapshotId;
-
-    private final String airlineUrl;
-
-    private final String sideview;
-
-    private final String image;
-
-    private final String imageLink;
-
-    private final String imageLarge;
-
-    private final String imagelinkLarge;
-
-    private final String copyright;
-
-    private final String copyrightLarge;
-
-    private final Integer firstTimestamp;
 
     public FlightDetailsResponse(@JsonProperty("q") String fightId, @JsonProperty("flight") String flightDesignator,
                                  @JsonProperty("status") String status,
@@ -102,16 +70,8 @@ public class FlightDetailsResponse {
                                  @JsonProperty("from_iata") String originIata, @JsonProperty("from_city") String originCity,
                                  @JsonProperty("from_pos") List<Double> originCoords, @JsonProperty("from_tz_code") String originTimezoneCode,
                                  @JsonProperty("from_tz_offset") double originTimezoneOffset, @JsonProperty("from_tz_name") String originTimezoneName,
-                                 @JsonProperty("real_to_iata") String realIata, @JsonProperty("real_to_city") String realCity,
-                                 @JsonProperty("real_to_pos") List<Double> realCoords, @JsonProperty("real_to_tz_code") String realTimezoneCode,
-                                 @JsonProperty("real_to_tz_offset") double realTimezoneOffset, @JsonProperty("real_to_tz_name") String realTimezoneName,
                                  @JsonProperty("airline") String airline, @JsonProperty("aircraft") String aircraft,
-                                 @JsonProperty("trail") List<Double> trail, @JsonProperty("snapshot_id") String snapshotId,
-                                 @JsonProperty("airline_url") String airlineUrl, @JsonProperty("sideview") String sideview,
-                                 @JsonProperty("image") String image, @JsonProperty("imagelink") String imageLink,
-                                 @JsonProperty("image_large") String imageLarge, @JsonProperty("imagelink_large") String imagelinkLarge,
-                                 @JsonProperty("copyright") String copyright, @JsonProperty("copyright_large") String copyrightLarge,
-                                 @JsonProperty("first_timestamp") Integer firstTimestamp) {
+                                 @JsonProperty("trail") List<Double> trail) {
         this.fightId = fightId;
         this.flightDesignator = flightDesignator;
         this.status = status;
@@ -132,27 +92,9 @@ public class FlightDetailsResponse {
         this.originTimezoneCode = originTimezoneCode;
         this.originTimezoneOffset = originTimezoneOffset;
         this.originTimezoneName = originTimezoneName;
-        this.realIata = realIata;
-        this.realCity = realCity;
-        this.realCoords = realCoords;
-        this.realTimezoneCode = realTimezoneCode;
-        this.realTimezoneOffset = realTimezoneOffset;
-        this.realTimezoneName = realTimezoneName;
         this.airline = airline;
         this.aircraft = aircraft;
         this.trail = trail;
-
-        // unused
-        this.snapshotId = snapshotId;
-        this.airlineUrl = airlineUrl;
-        this.sideview = sideview;
-        this.image = image;
-        this.imageLink = imageLink;
-        this.imageLarge = imageLarge;
-        this.imagelinkLarge = imagelinkLarge;
-        this.copyright = copyright;
-        this.copyrightLarge = copyrightLarge;
-        this.firstTimestamp = firstTimestamp;
     }
 
     public String getFightId() {
@@ -245,34 +187,5 @@ public class FlightDetailsResponse {
 
     public List<Double> getTrail() {
         return trail;
-    }
-
-    // unused //////////////////////////////////////////////////////////////
-    public String getSnapshotId() {
-        return snapshotId;
-    }
-
-    public String getAirlineUrl() {
-        return airlineUrl;
-    }
-
-    public String getSideview() {
-        return sideview;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public String getImageLink() {
-        return imageLink;
-    }
-
-    public String getCopyright() {
-        return copyright;
-    }
-
-    public Integer getFirstTimestamp() {
-        return firstTimestamp;
     }
 }

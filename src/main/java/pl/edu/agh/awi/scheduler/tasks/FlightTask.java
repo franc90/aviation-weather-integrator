@@ -117,7 +117,8 @@ public class FlightTask extends AbstractHazelcastComponent {
             CachedFlight cachedFlight = convert(flight);
             flights.put(flight.getFlightId(), cachedFlight);
         } catch (SchedulerException e) {
-            logger.info(e.getMessage());
+//            Not logging to many dest/arr airports get not processed.
+//            logger.info(e.getMessage());
         }
     }
 

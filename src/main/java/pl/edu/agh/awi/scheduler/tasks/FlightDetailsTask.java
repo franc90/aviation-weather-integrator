@@ -117,7 +117,6 @@ public class FlightDetailsTask extends AbstractHazelcastComponent {
     }
 
     private void download(Flight flight, LoadBalancer loadBalancer) {
-        logger.info("Downloading details for " + flight.getFlightId());
 
         FlightDetailsResponse response = client
                 .withLoadBalancer(loadBalancer.getDomain())
@@ -125,10 +124,11 @@ public class FlightDetailsTask extends AbstractHazelcastComponent {
                 .getResponse();
 
         if (response == null) {
+            logger.info("No response for " + flight.getFlightId());
             return;
         }
 
-        logger.info("Updating flight " + flight.getFlightId());
+
         updateFlight(flight, response);
         persistenceService.saveFlight(flight);
 
