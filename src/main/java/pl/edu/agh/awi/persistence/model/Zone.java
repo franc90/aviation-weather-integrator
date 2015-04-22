@@ -2,6 +2,7 @@ package pl.edu.agh.awi.persistence.model;
 
 import com.google.common.collect.Sets;
 import org.springframework.data.neo4j.annotation.GraphId;
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -14,6 +15,7 @@ public class Zone implements Serializable {
     @GraphId
     private Long id;
 
+    @Indexed
     private String name;
 
     private Double minimalLatitude;
@@ -84,6 +86,10 @@ public class Zone implements Serializable {
 
     public void addSubzone(Zone subzone) {
         subzones.add(subzone);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public static class Builder {

@@ -5,7 +5,7 @@ import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
-public interface AviationGraphRepository<T> extends GraphRepository<T> {
+public interface AviationGraphRepository<T> extends OptionalSaveGraphRepository<T> {
 
     T findByName(String name);
 

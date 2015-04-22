@@ -19,6 +19,6 @@ public class AirlinesLoader extends AbstractLoader<AirlineResponse, Airline, Air
     public void loadData() {
         AirlineResponse response = client.getResponse();
         List<AirLine> airLines = converter.convert(response.getAirlines());
-        airLineRepository.save(airLines);
+        airLineRepository.saveIfNotExists(airLines);
     }
 }

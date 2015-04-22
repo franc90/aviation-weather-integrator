@@ -57,13 +57,13 @@ public class ZonesLoaderTest {
         when(zoneClientMock.getResponse()).thenReturn(zoneResponseMock);
         when(zoneResponseMock.getZones()).thenReturn(zonesFromResponseMock);
         when(zoneConverterMock.convert(zonesFromResponseMock)).thenReturn(convertedZonesMock);
-        when(zoneRepositoryMock.save(convertedZonesMock)).thenReturn(givenSavedZones);
+        when(zoneRepositoryMock.saveIfNotExists(convertedZonesMock)).thenReturn(givenSavedZones);
     }
 
     @Test
     public void shouldLoadAndCacheZones() {
         zonesLoader.loadData();
-        verify(zoneRepositoryMock).save(convertedZonesMock);
+        verify(zoneRepositoryMock).saveIfNotExists(convertedZonesMock);
         verify(cachedZonesMock).clear();
         verify(cachedZonesMock).addAll(argThat(new ZoneListToCacheMatcher()));
     }
@@ -76,6 +76,4 @@ public class ZonesLoaderTest {
             return zones.contains(givenZone);
         }
     }
-
-
 }

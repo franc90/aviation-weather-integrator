@@ -17,8 +17,7 @@ import java.math.BigInteger;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @DirtiesContext
@@ -32,6 +31,29 @@ public class ZoneRepositoryTest {
 
     @Autowired
     private Neo4jTemplate neo4jTemplate;
+
+
+    @Test
+    public void shouldNotSaveZone() {
+        Zone givenZone = createZone();
+        givenZone = neo4jTemplate.save(givenZone);
+        Zone zone = zoneRepository.saveIfNotExists(givenZone);
+        assertNotNull(zone);
+        assertEquals(givenZone.getId(), zone.getId());
+    }
+
+    @Test
+    public void shouldSaveZone() {
+        Zone givenZone = createZone();
+        Zone zone = zoneRepository.saveIfNotExists(givenZone);
+        assertNotNull(zone);
+        assertNotNull(zone.getId());
+        assertEquals(givenZone.getName(), zone.getName());
+    }
+
+    private Zone createZone() {
+        return new Zone.Builder().withName("zone1").build();
+    }
 
     @Test
     public void shouldFindWidestZone() {

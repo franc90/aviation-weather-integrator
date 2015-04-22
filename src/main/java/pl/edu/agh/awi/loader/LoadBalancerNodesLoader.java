@@ -21,7 +21,7 @@ public class LoadBalancerNodesLoader extends AbstractLoader<LoadBalancerResponse
         LoadBalancerResponse response = client.getResponse();
         Map<String, Integer> availableNodes = response.getAvailableNodes();
         List<LoadBalancer> loadBalancers = converter.convert(new ArrayList<>(availableNodes.entrySet()));
-        loadBalancerRepository.save(loadBalancers);
+        loadBalancerRepository.saveIfNotExists(loadBalancers);
     }
 
 }

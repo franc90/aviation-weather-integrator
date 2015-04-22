@@ -28,6 +28,6 @@ public class AirportsLoader extends AbstractLoader<AirportResponse, Airport, Air
         List<AirPort> filteredAirPorts = airports.stream()
                 .filter(airPort -> supportCountries.contains(airPort.getCountry()))
                 .collect(Collectors.toList());
-        airPortRepository.save(filteredAirPorts);
+        airPortRepository.saveIfNotExists(filteredAirPorts);
     }
 }
