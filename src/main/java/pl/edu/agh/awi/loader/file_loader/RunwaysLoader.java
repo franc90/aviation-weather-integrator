@@ -44,7 +44,7 @@ public class RunwaysLoader implements FileLoader<Long> {
 
     private void loadRunways() {
         try {
-            List<String> read = IOUtils.readLines(ClassLoader.getSystemResourceAsStream(RUNWAYS_CSV));
+            List<String> read = IOUtils.readLines(ClassLoader.getSystemResourceAsStream(RUNWAYS_CSV), "UTF-8");
 
             runways = read
                     .stream()
