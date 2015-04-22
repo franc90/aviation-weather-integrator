@@ -17,7 +17,9 @@ import pl.edu.agh.awi.scheduler.exception.SchedulerException;
 import pl.edu.agh.awi.scheduler.helper.CronHelper;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
@@ -98,9 +100,13 @@ public class FlightDetailsTask extends AbstractHazelcastComponent {
                                 LocalDateTime
                                         .now()
                                         .minusHours(36),
-                                flight
-                                        .getScheduledDepartureTime()
-                                        .toInstant()
+                                LocalDateTime
+                                        .ofInstant(
+                                                Instant.ofEpochMilli(flight
+                                                        .getScheduledDepartureTime()
+                                                        .getTime()),
+                                                ZoneId.of("UTC")
+                                        )
                         ).minusHours(36)
                         .isNegative();
     }
@@ -132,6 +138,7 @@ public class FlightDetailsTask extends AbstractHazelcastComponent {
         updateFlight(flight, response);
         persistenceService.saveFlight(flight);
 
+        logger.info("Flight downloaded " + flight.getFlightId());
         if ("landed".equals(flight.getStatus())) {
             updateCaches(flight.getFlightId());
         }

@@ -1,5 +1,6 @@
 package pl.edu.agh.awi.downloader.flights;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import pl.edu.agh.awi.downloader.exceptions.MalformedUrlException;
 
@@ -10,7 +11,7 @@ public abstract class AbstractFlightsClient<T, U> {
 
     private Class<U> responseType;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public AbstractFlightsClient(Class<U> responseType) {
         this.responseType = responseType;
