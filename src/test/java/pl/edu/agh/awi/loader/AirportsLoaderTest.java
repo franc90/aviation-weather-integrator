@@ -71,7 +71,7 @@ public class AirportsLoaderTest {
     @Test
     public void shouldLoadOnlyAirPortsForSupportedCountries() {
         airportsLoader.loadData();
-        verify(airPortRepositoryMock).save(argThat(new AirPortListMatcher()));
+        verify(airPortRepositoryMock).saveIfNotExists(argThat(new AirPortListMatcher()));
     }
 
     private class AirPortListMatcher extends ArgumentMatcher<List<AirPort>> {

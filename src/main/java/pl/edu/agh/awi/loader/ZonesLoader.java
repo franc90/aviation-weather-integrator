@@ -34,7 +34,7 @@ public class ZonesLoader extends AbstractLoader<ZoneResponse, pl.edu.agh.awi.dow
     public void loadData() {
         ZoneResponse response = client.getResponse();
         List<Zone> zones = converter.convert(response.getZones());
-        Iterable<Zone> savedZones = zoneRepository.save(zones);
+        Iterable<Zone> savedZones = zoneRepository.saveIfNotExists(zones);
         cacheZones(savedZones);
         logger.info("Zones loaded");
     }

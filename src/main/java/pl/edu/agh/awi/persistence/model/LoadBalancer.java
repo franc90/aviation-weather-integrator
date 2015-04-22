@@ -1,6 +1,7 @@
 package pl.edu.agh.awi.persistence.model;
 
 import org.springframework.data.neo4j.annotation.GraphId;
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 @NodeEntity
@@ -9,7 +10,9 @@ public class LoadBalancer {
     @GraphId
     private Long id;
 
+    @Indexed
     private String domain;
+
     private Integer load;
 
     public static LoadBalancer createInstance(String domain, Integer load) {
@@ -33,6 +36,10 @@ public class LoadBalancer {
 
     public void setLoad(Integer load) {
         this.load = load;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override

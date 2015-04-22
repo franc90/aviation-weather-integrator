@@ -17,6 +17,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -28,8 +30,27 @@ public class LoadBalancerRepositoryTest {
 
     @Autowired
     private LoadBalancerRepository repository;
+
     @Autowired
     private Neo4jTemplate neo4jTemplate;
+
+
+    @Test
+    public void shouldNotSaveZone() {
+        LoadBalancer givenBalancer = createLoadBalancer(1);
+        givenBalancer = neo4jTemplate.save(givenBalancer);
+        LoadBalancer balancer = repository.saveIfNotExists(givenBalancer);
+        assertNotNull(balancer);
+        assertEquals(givenBalancer, balancer);
+    }
+
+    @Test
+    public void shouldSaveZone() {
+        LoadBalancer givenBalancer = createLoadBalancer(1);
+        LoadBalancer balancer = repository.saveIfNotExists(givenBalancer);
+        assertNotNull(balancer);
+        assertNotNull(balancer.getId());
+    }
 
     @Test
     public void shouldSaveLoadBalancers() {

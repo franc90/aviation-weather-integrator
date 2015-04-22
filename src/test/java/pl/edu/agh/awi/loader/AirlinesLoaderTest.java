@@ -52,7 +52,7 @@ public class AirlinesLoaderTest {
     @Test
     public void shouldLoadAirlines() {
         airlinesLoader.loadData();
-        verify(airLineRepositoryMock).save(convertedAirLinesMock);
+        verify(airLineRepositoryMock).saveIfNotExists(convertedAirLinesMock);
     }
 
 }

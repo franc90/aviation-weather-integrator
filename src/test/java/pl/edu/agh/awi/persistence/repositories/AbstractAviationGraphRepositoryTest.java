@@ -46,7 +46,6 @@ public abstract class AbstractAviationGraphRepositoryTest<T> {
 
 
     @Before
-    @Transactional
     public void initDatabase(){
         initFindMethodMap();
         saveToDatabase();
@@ -66,6 +65,25 @@ public abstract class AbstractAviationGraphRepositoryTest<T> {
         delegate.icaoCodeSetter.accept(ICAO);
         delegate.iataCodeSetter.accept(IATA);
         neo4jTemplate.saveOnly(airLine);
+    }
+
+    @Test
+    public void shouldNotSaveNode() {
+        T givenNode = findMethodMap.get(ICAO).apply(ICAO);
+        T node = repository.saveIfNotExists(givenNode);
+        assertNotNull(node);
+        assertEquals(givenNode, node);
+    }
+
+    @Test
+    public void shouldSaveNode() {
+        String name = "someName";
+        AviationDelegate<T> delegate = createAviationDelegate();
+        T givenNode = delegate.aviationItem;
+        delegate.nameSetter.accept(name);
+        T node = repository.saveIfNotExists(givenNode);
+        assertNotNull(node);
+        assertNotNull(neo4jTemplate.getId(node));
     }
 
     @Test
