@@ -1,7 +1,6 @@
 package pl.edu.agh.awi.persistence.repositories;
 
 
-import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean

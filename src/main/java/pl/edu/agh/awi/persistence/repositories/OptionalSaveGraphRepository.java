@@ -3,7 +3,7 @@ package pl.edu.agh.awi.persistence.repositories;
 
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.repository.NoRepositoryBean;
-import pl.edu.agh.awi.persistence.model.IndexedPropertyExtractor;
+import pl.edu.agh.awi.persistence.model.UniquePropertyExtractor;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -25,7 +25,7 @@ public interface OptionalSaveGraphRepository<T> extends GraphRepository<T> {
     }
 
     default Optional<T> load(T node) {
-        return IndexedPropertyExtractor.extractIndexedProperties(node).entrySet()
+        return UniquePropertyExtractor.extractUniqueProperties(node).entrySet()
                 .stream()
                 .map(entry -> findBySchemaPropertyValue(entry.getKey(), entry.getValue()))
                 .filter(Objects::nonNull)

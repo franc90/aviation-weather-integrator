@@ -35,6 +35,7 @@ public class AirPort {
     private String iataCode;
 
     @Indexed
+    @Unique
     private String icaoCode;
 
     @RelatedTo(type = "metar")

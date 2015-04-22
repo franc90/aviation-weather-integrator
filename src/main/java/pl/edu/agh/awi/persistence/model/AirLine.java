@@ -21,6 +21,7 @@ public class AirLine {
     private String iataCode;
 
     @Indexed
+    @Unique
     private String icaoCode;
 
     @RelatedTo(type = "belongs_to", direction = Direction.INCOMING)

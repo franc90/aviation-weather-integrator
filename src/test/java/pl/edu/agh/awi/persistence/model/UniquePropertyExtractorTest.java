@@ -2,14 +2,13 @@ package pl.edu.agh.awi.persistence.model;
 
 
 import org.junit.Test;
-import org.springframework.data.neo4j.annotation.Indexed;
 
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class IndexedPropertyExtractorTest {
+public class UniquePropertyExtractorTest {
 
     @Test
     public void shouldExtractIndexedProperties() {
@@ -17,7 +16,7 @@ public class IndexedPropertyExtractorTest {
         String indexValue = "value";
         NodeWithIndex nodeWithIndex = new NodeWithIndex();
         nodeWithIndex.setSomeIndex(indexValue);
-        Map<String, Object> extracted = IndexedPropertyExtractor.extractIndexedProperties(nodeWithIndex);
+        Map<String, Object> extracted = UniquePropertyExtractor.extractUniqueProperties(nodeWithIndex);
         assertTrue(extracted.containsKey(indexName));
         assertEquals(indexValue, extracted.get(indexName));
 
@@ -25,7 +24,7 @@ public class IndexedPropertyExtractorTest {
 
     private class NodeWithIndex {
 
-        @Indexed
+        @Unique
         private String someIndex;
 
         public String getSomeIndex() {
