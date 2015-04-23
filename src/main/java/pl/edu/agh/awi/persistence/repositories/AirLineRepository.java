@@ -6,11 +6,11 @@ import pl.edu.agh.awi.persistence.model.AirLine;
 public interface AirLineRepository extends AviationGraphRepository<AirLine> {
 
     @Override
-    AirLine findByName(String name);
+    Iterable<AirLine> findByName(String name);
 
     @Override
-    AirLine findByIcaoCode(String icaoCode);
+    Iterable<AirLine> findByIcaoCode(String icaoCode);
 
     @Override
-    AirLine findByIataCode(String iataCode);
+    Iterable<AirLine> findByIataCode(String iataCode);
 }

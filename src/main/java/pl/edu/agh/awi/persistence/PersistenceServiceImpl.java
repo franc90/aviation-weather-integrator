@@ -10,6 +10,9 @@ import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
 import pl.edu.agh.awi.persistence.repositories.*;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Component
 public class PersistenceServiceImpl implements PersistenceService {
@@ -74,19 +77,19 @@ public class PersistenceServiceImpl implements PersistenceService {
     @Override
     @Transactional
     public AirLine findAirLineByIataCode(String iata) {
-        return airLineRepository.findByIataCode(iata);
+        return extractFirstElement(airLineRepository.findByIataCode(iata));
     }
 
     @Override
     @Transactional
     public AirLine findAirLineByIcaoCode(String icao) {
-        return airLineRepository.findByIcaoCode(icao);
+        return extractFirstElement(airLineRepository.findByIcaoCode(icao));
     }
 
     @Override
     @Transactional
     public AirPort findAirPortByIataCode(String iata) {
-        return airPortRepository.findByIataCode(iata);
+        return extractFirstElement(airPortRepository.findByIataCode(iata));
     }
 
     @Override
@@ -117,5 +120,15 @@ public class PersistenceServiceImpl implements PersistenceService {
     @Transactional
     public void addAirsigmet(AirPort airport, AirSigmet airSigmet) {
         airport.addAirSigmet(airSigmet);
+    }
+
+    public <T> T extractFirstElement(Iterable<T> iterable) {
+        return Stream.of(iterable)
+                .map(Iterable::iterator)
+                .filter(Iterator::hasNext)
+                .map(Iterator::next)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .get();
     }
 }

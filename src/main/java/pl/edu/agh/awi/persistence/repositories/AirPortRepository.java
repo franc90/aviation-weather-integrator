@@ -10,13 +10,13 @@ import java.util.Date;
 public interface AirPortRepository extends AviationGraphRepository<AirPort> {
 
     @Override
-    AirPort findByName(String name);
+    Iterable<AirPort> findByName(String name);
 
     @Override
-    AirPort findByIcaoCode(String icaoCode);
+    Iterable<AirPort> findByIcaoCode(String icaoCode);
 
     @Override
-    AirPort findByIataCode(String iataCode);
+    Iterable<AirPort> findByIataCode(String iataCode);
 
     @Query("MATCH (airPort:AirPort {icaoCode : {1} } ) -[:metar]-> (metar:Metar) " +
             "WHERE metar.timestamp = {0} " +

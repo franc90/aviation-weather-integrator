@@ -38,6 +38,7 @@ public class LoadBalancerRepositoryTest {
     @Test
     public void shouldNotSaveZone() {
         LoadBalancer givenBalancer = createLoadBalancer(1);
+        neo4jTemplate.save(givenBalancer);
         givenBalancer = neo4jTemplate.save(givenBalancer);
         LoadBalancer balancer = repository.saveIfNotExists(givenBalancer);
         assertNotNull(balancer);

@@ -30,7 +30,7 @@ import static org.junit.Assert.assertNotNull;
 @Transactional
 public abstract class AbstractAviationGraphRepositoryTest<T> {
 
-    private Map<String, Function<String, T>> findMethodMap;
+    private Map<String, Function<String, Iterable<T>>> findMethodMap;
     private static final String NAME = "NAME";
     private static final String ICAO = "ICAO";
     private static final String IATA = "IATA";
@@ -69,7 +69,7 @@ public abstract class AbstractAviationGraphRepositoryTest<T> {
 
     @Test
     public void shouldNotSaveNode() {
-        T givenNode = findMethodMap.get(ICAO).apply(ICAO);
+        T givenNode = findMethodMap.get(ICAO).apply(ICAO).iterator().next();
         T node = repository.saveIfNotExists(givenNode);
         assertNotNull(node);
         assertEquals(givenNode, node);
@@ -103,7 +103,7 @@ public abstract class AbstractAviationGraphRepositoryTest<T> {
     }
 
     private void assertFindBy(String key) {
-        T aviationItem = findMethodMap.get(key).apply(key);
+        T aviationItem = findMethodMap.get(key).apply(key).iterator().next();
         assertNotNull(aviationItem);
         AviationGettersComposite gettersComposite = createGettersCompositeFor(aviationItem);
         Supplier<String> getter = gettersComposite.getGetterMethod(key);
