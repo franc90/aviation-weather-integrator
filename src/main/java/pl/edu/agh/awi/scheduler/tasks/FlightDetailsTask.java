@@ -154,7 +154,9 @@ public class FlightDetailsTask extends AbstractHazelcastComponent {
 
     private void updateCaches(String flightId) {
         CachedFlight removed = flights.remove(flightId);
-        finishedFlights.put(flightId, removed);
+        if (removed != null) {
+            finishedFlights.put(flightId, removed);
+        }
     }
 
 }
