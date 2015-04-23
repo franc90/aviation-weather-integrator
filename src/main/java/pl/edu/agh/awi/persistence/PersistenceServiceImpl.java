@@ -8,6 +8,7 @@ import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
 import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
 import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
 import pl.edu.agh.awi.persistence.repositories.*;
+import pl.edu.agh.awi.scheduler.exception.SchedulerException;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -129,6 +130,10 @@ public class PersistenceServiceImpl implements PersistenceService {
                 .map(Iterator::next)
                 .filter(Objects::nonNull)
                 .findFirst()
-                .get();
+                .orElseThrow(this::createException);
+    }
+
+    private PersistenceException createException() {
+        return new PersistenceException("Cannot find node") ;
     }
 }

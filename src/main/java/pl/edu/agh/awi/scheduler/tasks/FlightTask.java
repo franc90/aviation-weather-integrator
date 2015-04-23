@@ -8,6 +8,7 @@ import org.springframework.util.CollectionUtils;
 import pl.edu.agh.awi.downloader.flights.flight.client.FlightClient;
 import pl.edu.agh.awi.downloader.flights.flight.data.Flight;
 import pl.edu.agh.awi.downloader.flights.flight.data.FlightResponse;
+import pl.edu.agh.awi.persistence.PersistenceException;
 import pl.edu.agh.awi.persistence.PersistenceService;
 import pl.edu.agh.awi.persistence.model.LoadBalancer;
 import pl.edu.agh.awi.persistence.model.Zone;
@@ -119,6 +120,8 @@ public class FlightTask extends AbstractHazelcastComponent {
         } catch (SchedulerException e) {
 //            Not logging to many dest/arr airports get not processed.
 //            logger.info(e.getMessage());
+        } catch (PersistenceException e) {
+            logger.fine(e.getMessage() +" for "+flight);
         }
     }
 

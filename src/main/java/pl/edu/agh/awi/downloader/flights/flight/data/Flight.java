@@ -161,6 +161,16 @@ public class Flight {
         return value2;
     }
 
+    @Override
+    public String toString() {
+        return "Flight{" +
+                "flightId='" + flightId + '\'' +
+                ", arrivalIata='" + arrivalIata + '\'' +
+                ", flightDesignator='" + flightDesignator + '\'' +
+                ", departureIata='" + departureIata + '\'' +
+                '}';
+    }
+
     public static class FlightBuilder {
 
         private String flightId;

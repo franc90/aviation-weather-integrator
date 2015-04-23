@@ -11,9 +11,12 @@ import pl.edu.agh.awi.persistence.model.Flight;
 import pl.edu.agh.awi.scheduler.exception.SchedulerException;
 import pl.edu.agh.awi.scheduler.helper.flight.SingleValueDownloaderHelper;
 
+import java.util.logging.Logger;
+
 @Component
 public class FlightPersistenceConverter {
 
+    private final Logger logger = Logger.getLogger("FlightPersistenceConverter");
     @Autowired
     private PersistenceService persistenceService;
 
@@ -34,6 +37,7 @@ public class FlightPersistenceConverter {
     private SingleValueDownloaderHelper<AirPort, String> airportIataDownloader = new SingleValueDownloaderHelper<AirPort, String>() {
         @Override
         protected AirPort getFromRepository(String key) {
+
             return persistenceService.findAirPortByIataCode(key);
         }
     };
