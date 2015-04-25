@@ -54,7 +54,7 @@ public class PersistenceServiceImpl implements PersistenceService {
     @Override
     @Transactional(readOnly = true)
     public Flight findFlightByFlightId(String flightId) {
-        return flightRepository.findByFlightId(flightId);
+        return extractFirstElement(flightRepository.findByFlightId(flightId));
     }
 
     @Override

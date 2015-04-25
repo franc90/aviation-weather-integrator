@@ -91,7 +91,7 @@ public class FlightRepositoryTest {
 
     @Test
     public void shouldFindFlightById() {
-        Flight flight = flightRepository.findByFlightId(EXISTING_FLIGHT_ID);
+        Flight flight = flightRepository.findByFlightId(EXISTING_FLIGHT_ID).iterator().next();
         assertEquals(existingFlight, flight);
     }
 
@@ -145,7 +145,7 @@ public class FlightRepositoryTest {
 
     @Test
     public void shouldUpdateFlightStatus() {
-        Flight flight = flightRepository.findByFlightId(EXISTING_FLIGHT_ID);
+        Flight flight = flightRepository.findByFlightId(EXISTING_FLIGHT_ID).iterator().next();
         String status = "LANDED";
         flight.setStatus(status);
         flightRepository.saveOnly(flight);
@@ -158,7 +158,7 @@ public class FlightRepositoryTest {
         Date timestamp = new Date();
         FlightDetail flightDetail = new FlightDetail();
         flightDetail.setTimestamp(timestamp);
-        Flight flight = flightRepository.findByFlightId(EXISTING_FLIGHT_ID);
+        Flight flight = flightRepository.findByFlightId(EXISTING_FLIGHT_ID).iterator().next();
         flight.addFlightDetail(flightDetail);
         flightRepository.saveOnly(flight);
         Flight flightFromDB = flightRepository.findBySchemaPropertyValue("flightId", EXISTING_FLIGHT_ID);
@@ -172,7 +172,7 @@ public class FlightRepositoryTest {
 
     @Test
     public void shouldAddNewArrivalAirPort() {
-        Flight flight = flightRepository.findByFlightId(EXISTING_FLIGHT_ID);
+        Flight flight = flightRepository.findByFlightId(EXISTING_FLIGHT_ID).iterator().next();
         flight.addDestinationAirPort(redirectedAirPort);
         flightRepository.saveOnly(flight);
         Flight flightFromDB = flightRepository.findBySchemaPropertyValue("flightId", EXISTING_FLIGHT_ID);

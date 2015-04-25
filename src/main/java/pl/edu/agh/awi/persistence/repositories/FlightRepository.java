@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public interface FlightRepository extends GraphRepository<Flight> {
 
-    Flight findByFlightId(String flightId);
+    Iterable<Flight> findByFlightId(String flightId);
 
     Collection<Flight> findByAirLineIcaoCode(String icaoCode);
 
