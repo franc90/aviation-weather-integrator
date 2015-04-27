@@ -31,4 +31,9 @@ public class ZoneClient extends AbstractFlightsClient<ZoneResponse, HashMap<Stri
     protected String getUrl() {
         return URL;
     }
+
+    @Override
+    protected String getParameter() {
+        return "";
+    }
 }

@@ -22,4 +22,9 @@ public class AirportClient extends AbstractFlightsClient<AirportResponse, Airpor
     protected String getUrl() {
         return URL;
     }
+
+    @Override
+    protected String getParameter() {
+        return "";
+    }
 }

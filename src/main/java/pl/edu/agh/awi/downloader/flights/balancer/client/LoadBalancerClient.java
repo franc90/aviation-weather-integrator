@@ -34,4 +34,9 @@ public class LoadBalancerClient extends AbstractFlightsClient<LoadBalancerRespon
     protected String getUrl() {
         return URL;
     }
+
+    @Override
+    protected String getParameter() {
+        return "";
+    }
 }

@@ -21,12 +21,14 @@ public abstract class AbstractFlightsClient<T, U> {
         try {
             return objectMapper.readValue(new URL(getUrl()), responseType);
         } catch (IOException e) {
-            throw new MalformedUrlException("Error while getting response", e);
+            throw new MalformedUrlException("Error while getting response", e, getParameter());
         }
     }
 
     public abstract T getResponse();
 
     protected abstract String getUrl();
+
+    protected abstract String getParameter();
 
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import pl.edu.agh.awi.downloader.exceptions.MalformedUrlException;
 import pl.edu.agh.awi.downloader.flights.flightDetails.client.FlightDetailsClient;
 import pl.edu.agh.awi.downloader.flights.flightDetails.data.FlightDetailsResponse;
 import pl.edu.agh.awi.persistence.PersistenceService;
@@ -55,7 +56,16 @@ public class FlightDetailsTask extends AbstractHazelcastComponent {
             return;
         }
 
-        download(loadBalancer);
+        try {
+            download(loadBalancer);
+        } catch (MalformedUrlException ex) {
+            String flightKey = ex.getParameter();
+
+            logger.info("Could not load flights for " + flightKey);
+
+            CachedFlight removedFlight = flights.remove(flightKey);
+            finishedFlights.put(flightKey, removedFlight);
+        }
     }
 
     private LoadBalancer loadBalancer() {

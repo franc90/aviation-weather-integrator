@@ -38,4 +38,9 @@ public class FlightDetailsClient extends AbstractFlightsClient<FlightDetailsResp
     protected String getUrl() {
         return format(URL, loadBalancer, flightId);
     }
+
+    @Override
+    protected String getParameter() {
+        return flightId;
+    }
 }

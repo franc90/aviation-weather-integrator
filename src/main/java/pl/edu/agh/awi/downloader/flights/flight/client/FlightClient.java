@@ -47,4 +47,9 @@ public class FlightClient extends AbstractFlightsClient<FlightResponse, HashMap<
     protected String getUrl() {
         return format(URL, loadBalancer, zone);
     }
+
+    @Override
+    protected String getParameter() {
+        return zone;
+    }
 }

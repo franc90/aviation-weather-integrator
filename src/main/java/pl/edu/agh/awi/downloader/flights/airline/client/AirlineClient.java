@@ -23,4 +23,9 @@ public class AirlineClient extends AbstractFlightsClient<AirlineResponse, Airlin
     protected String getUrl() {
         return URL;
     }
+
+    @Override
+    protected String getParameter() {
+        return "";
+    }
 }
