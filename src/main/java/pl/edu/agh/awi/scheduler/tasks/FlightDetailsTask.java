@@ -1,6 +1,5 @@
 package pl.edu.agh.awi.scheduler.tasks;
 
-import com.hazelcast.core.IMap;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,40 +11,37 @@ import pl.edu.agh.awi.downloader.flights.flightDetails.data.FlightDetailsRespons
 import pl.edu.agh.awi.persistence.PersistenceService;
 import pl.edu.agh.awi.persistence.model.Flight;
 import pl.edu.agh.awi.persistence.model.LoadBalancer;
-import pl.edu.agh.awi.scheduler.AbstractHazelcastComponent;
 import pl.edu.agh.awi.scheduler.cache.CachedFlight;
 import pl.edu.agh.awi.scheduler.exception.SchedulerException;
 import pl.edu.agh.awi.scheduler.helper.CronHelper;
 
+import javax.annotation.Resource;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Component
-public class FlightDetailsTask extends AbstractHazelcastComponent {
+public class FlightDetailsTask {
 
     private final Logger logger = Logger.getLogger("FlightDetailsTask");
 
-    private IMap<String, CachedFlight> flights;
+    @Resource
+    private Map<String, CachedFlight> flights;
 
-    private IMap<String, CachedFlight> finishedFlights;
+    @Resource
+    private Map<String, CachedFlight> finishedFlights;
 
     @Autowired
     private FlightDetailsClient client;
 
     @Autowired
     private PersistenceService persistenceService;
-
-    @Override
-    public void init() {
-        flights = hazelcast.getMap("flights");
-        finishedFlights = hazelcast.getMap("finishedFlights");
-    }
 
     @Scheduled(cron = CronHelper.FLIGHT_DETAIL_CRON)
     public void task() {

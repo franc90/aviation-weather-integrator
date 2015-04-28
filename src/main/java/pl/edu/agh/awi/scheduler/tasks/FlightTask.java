@@ -1,10 +1,10 @@
 package pl.edu.agh.awi.scheduler.tasks;
 
-import com.hazelcast.core.IMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import pl.edu.agh.awi.downloader.exceptions.MalformedUrlException;
 import pl.edu.agh.awi.downloader.flights.flight.client.FlightClient;
 import pl.edu.agh.awi.downloader.flights.flight.data.Flight;
 import pl.edu.agh.awi.downloader.flights.flight.data.FlightResponse;
@@ -12,7 +12,6 @@ import pl.edu.agh.awi.persistence.PersistenceException;
 import pl.edu.agh.awi.persistence.PersistenceService;
 import pl.edu.agh.awi.persistence.model.LoadBalancer;
 import pl.edu.agh.awi.persistence.model.Zone;
-import pl.edu.agh.awi.scheduler.AbstractHazelcastComponent;
 import pl.edu.agh.awi.scheduler.cache.CachedFlight;
 import pl.edu.agh.awi.scheduler.cache.CachedFlightBuilder;
 import pl.edu.agh.awi.scheduler.converter.FlightPersistenceConverter;
@@ -20,21 +19,25 @@ import pl.edu.agh.awi.scheduler.exception.SchedulerException;
 import pl.edu.agh.awi.scheduler.helper.CronHelper;
 import pl.edu.agh.awi.scheduler.helper.ZoneHelper;
 
+import javax.annotation.Resource;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Component
-public class FlightTask extends AbstractHazelcastComponent {
+public class FlightTask {
 
     private static final String NORTH_AMERICA = "northamerica";
 
     private final Logger logger = Logger.getLogger("FlightTask");
 
-    private IMap<String, CachedFlight> flights;
+    @Resource
+    private Map<String, CachedFlight> flights;
 
-    private IMap<String, CachedFlight> finishedFlights;
+    @Resource
+    private Map<String, CachedFlight> finishedFlights;
 
     @Autowired
     private FlightClient client;
@@ -48,12 +51,6 @@ public class FlightTask extends AbstractHazelcastComponent {
     @Autowired
     private ZoneHelper zoneHelper;
 
-    @Override
-    public void init() {
-        flights = hazelcast.getMap("flights");
-        finishedFlights = hazelcast.getMap("finishedFlights");
-    }
-
     @Scheduled(cron = CronHelper.FLIGHT_CRON)
     public void task() {
         Zone zone;
@@ -66,7 +63,16 @@ public class FlightTask extends AbstractHazelcastComponent {
             return;
         }
 
-        downloadFlights(zone, loadBalancer);
+        try {
+            downloadFlights(zone, loadBalancer);
+        } catch (MalformedUrlException ex) {
+            String flightKey = ex.getParameter();
+
+            logger.info("Could not load flights for " + flightKey);
+
+            CachedFlight removedFlight = flights.remove(flightKey);
+            finishedFlights.put(flightKey, removedFlight);
+        }
     }
 
     private LoadBalancer loadBalancer() {
@@ -103,7 +109,7 @@ public class FlightTask extends AbstractHazelcastComponent {
                 .forEach(this::saveFlight);
     }
 
-    private boolean doesNotContain(IMap<String, CachedFlight> flights, Flight flight) {
+    private boolean doesNotContain(Map<String, CachedFlight> flights, Flight flight) {
         CachedFlight cachedFlight = flights.get(flight.getFlightId());
         return cachedFlight == null;
     }
@@ -121,7 +127,7 @@ public class FlightTask extends AbstractHazelcastComponent {
 //            Not logging to many dest/arr airports get not processed.
 //            logger.info(e.getMessage());
         } catch (PersistenceException e) {
-            logger.fine(e.getMessage() +" for "+flight);
+            logger.fine(e.getMessage() + " for " + flight);
         }
     }
 

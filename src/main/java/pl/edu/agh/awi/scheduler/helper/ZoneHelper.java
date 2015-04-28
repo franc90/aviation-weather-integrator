@@ -1,30 +1,25 @@
 package pl.edu.agh.awi.scheduler.helper;
 
-import com.hazelcast.core.IList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import pl.edu.agh.awi.persistence.PersistenceService;
 import pl.edu.agh.awi.persistence.model.Zone;
-import pl.edu.agh.awi.scheduler.AbstractHazelcastComponent;
 import pl.edu.agh.awi.scheduler.exception.SchedulerException;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Component
-public class ZoneHelper extends AbstractHazelcastComponent {
+public class ZoneHelper {
 
     @Autowired
     private PersistenceService persistenceService;
 
-    private IList<Zone> zones;
-
-    @Override
-    protected void init() {
-        zones = hazelcast.getList("zones");
-    }
+    @Resource
+    private List<Zone> zones;
 
     public Zone loadZone(String zoneName) {
         if (CollectionUtils.isEmpty(zones)) {
