@@ -1,5 +1,6 @@
 package pl.edu.agh.awi.scheduler.tasks;
 
+import com.google.common.cache.Cache;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +23,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -32,10 +32,10 @@ public class FlightDetailsTask {
     private final Logger logger = Logger.getLogger("FlightDetailsTask");
 
     @Resource
-    private Map<String, CachedFlight> flights;
+    private Cache<String, CachedFlight> flights;
 
     @Resource
-    private Map<String, CachedFlight> finishedFlights;
+    private Cache<String, CachedFlight> finishedFlights;
 
     @Autowired
     private FlightDetailsClient client;
@@ -59,8 +59,11 @@ public class FlightDetailsTask {
 
             logger.info("Could not load flights for " + flightKey);
 
-            CachedFlight removedFlight = flights.remove(flightKey);
-            finishedFlights.put(flightKey, removedFlight);
+            CachedFlight removedFlight = flights.getIfPresent(flightKey);
+            if (removedFlight != null) {
+                flights.invalidate(flightKey);
+                finishedFlights.put(flightKey, removedFlight);
+            }
         }
     }
 
@@ -78,7 +81,7 @@ public class FlightDetailsTask {
     }
 
     private void download(LoadBalancer loadBalancer) {
-        if (flights.isEmpty()) {
+        if (flights.size() == 0) {
             downloadUsingDB(loadBalancer);
         } else {
             downloadUsingCache(loadBalancer);
@@ -119,6 +122,7 @@ public class FlightDetailsTask {
 
     private void downloadUsingCache(LoadBalancer loadBalancer) {
         flights
+                .asMap()
                 .keySet()
                 .forEach(flightId -> {
                     Flight flight = persistenceService.findFlightByFlightId(flightId);
@@ -159,8 +163,9 @@ public class FlightDetailsTask {
     }
 
     private void updateCaches(String flightId) {
-        CachedFlight removed = flights.remove(flightId);
+        CachedFlight removed = flights.getIfPresent(flightId);
         if (removed != null) {
+            flights.invalidate(flightId);
             finishedFlights.put(flightId, removed);
         }
     }

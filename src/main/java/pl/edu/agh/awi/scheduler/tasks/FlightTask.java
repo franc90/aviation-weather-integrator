@@ -1,5 +1,6 @@
 package pl.edu.agh.awi.scheduler.tasks;
 
+import com.google.common.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -34,10 +35,10 @@ public class FlightTask {
     private final Logger logger = Logger.getLogger("FlightTask");
 
     @Resource
-    private Map<String, CachedFlight> flights;
+    private Cache<String, CachedFlight> flights;
 
     @Resource
-    private Map<String, CachedFlight> finishedFlights;
+    private Cache<String, CachedFlight> finishedFlights;
 
     @Autowired
     private FlightClient client;
@@ -70,8 +71,11 @@ public class FlightTask {
 
             logger.info("Could not load flights for " + flightKey);
 
-            CachedFlight removedFlight = flights.remove(flightKey);
-            finishedFlights.put(flightKey, removedFlight);
+            CachedFlight removedFlight = flights.getIfPresent(flightKey);
+            if (removedFlight != null) {
+                flights.invalidate(flightKey);
+                finishedFlights.put(flightKey, removedFlight);
+            }
         }
     }
 
@@ -106,12 +110,22 @@ public class FlightTask {
                 .stream()
                 .filter(e -> doesNotContain(flights, e))
                 .filter(e -> doesNotContain(finishedFlights, e))
+                .filter(this::dbDoesNotContain)
                 .forEach(this::saveFlight);
     }
 
-    private boolean doesNotContain(Map<String, CachedFlight> flights, Flight flight) {
-        CachedFlight cachedFlight = flights.get(flight.getFlightId());
+    private boolean doesNotContain(Cache<String, CachedFlight> flights, Flight flight) {
+        CachedFlight cachedFlight = flights.getIfPresent(flight.getFlightId());
         return cachedFlight == null;
+    }
+
+    private boolean dbDoesNotContain(Flight flight) {
+        try {
+            persistenceService.findFlightByFlightId(flight.getFlightId());
+        } catch (PersistenceException ex) {
+            return true;
+        }
+        return false;
     }
 
     private void saveFlight(Flight flight) {
