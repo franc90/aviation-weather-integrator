@@ -28,6 +28,15 @@ public interface PersistenceService {
     Collection<AirPort> findAllAirPorts();
 
     @Transactional
+    Collection<Flight> findFlightsByAirLineIataCode(String iata);
+
+    @Transactional
+    Collection<Flight> findFlightByDepartureAirportIataCode(String iata);
+
+    @Transactional
+    Collection<Flight> findFlightByArrivalAirportIataCode(String iata);
+
+    @Transactional
     void saveAirport(AirPort airPort);
 
     @Transactional
