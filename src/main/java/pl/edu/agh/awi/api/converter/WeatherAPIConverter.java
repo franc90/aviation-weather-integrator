@@ -10,8 +10,10 @@ public class WeatherAPIConverter {
 
     @Autowired
     private IcingAPIConverter icingAPIConverter;
+
     @Autowired
     private SkyAPIConverter skyAPIConverter;
+
     @Autowired
     private TurbulenceAPIConverter turbulenceAPIConverter;
 

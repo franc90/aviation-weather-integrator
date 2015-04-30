@@ -24,12 +24,16 @@ public class FlightController {
 
     @Autowired
     private PersistenceService persistenceService;
+
     @Autowired
     private FlightAPIConverter flightAPIConverter;
+
     @Autowired
     private AirLineAPIConverter airLineAPIConverter;
+
     @Autowired
     private AirPortAPIConverter airPortAPIConverter;
+
     @Autowired
     private DestinationAirPortAPIConverter destinationAirPortAPIConverter;
 

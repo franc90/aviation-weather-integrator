@@ -10,8 +10,10 @@ public class FlightAPIConverter extends AbstractConverter<Flight, FlightAPIObjec
 
     @Autowired
     private AirPortAPIConverter airPortAPIConverter;
+
     @Autowired
     private AirLineAPIConverter airLineAPIConverter;
+
     @Autowired
     private DestinationAirPortAPIConverter destinationAirPortConverter;
 

@@ -62,4 +62,13 @@ public interface PersistenceService {
 
     @Transactional
     void addAirsigmet(AirPort airport, AirSigmet airSigmet);
+
+    @Transactional
+    Collection<Metar> findMetarByAirportIata(String iata);
+
+    @Transactional
+    Collection<Taf> findTafByAirportIata(String iata);
+
+    @Transactional
+    Collection<AirSigmet> findAirSigmetByAirportIata(String iata);
 }

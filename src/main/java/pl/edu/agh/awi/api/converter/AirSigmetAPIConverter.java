@@ -31,7 +31,7 @@ public class AirSigmetAPIConverter extends AbstractConverter<AirSigmet, AirSigme
         }
 
         if (deep) {
-            target.setHazard(hazardAPIConverter.convert(source.getHazard(), false));
+            target.setHazard(hazardAPIConverter.convert(source.getHazard(), deep));
         }
         return target;
     }

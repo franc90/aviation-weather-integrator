@@ -6,6 +6,7 @@ import pl.edu.agh.awi.persistence.model.weather_condition.IcingCondition;
 
 @Component
 public class IcingAPIConverter extends AbstractConverter<IcingCondition, IcingConditionAPIObject> {
+
     @Override
     public IcingConditionAPIObject convert(IcingCondition source, boolean deep) {
         if (source == null) {

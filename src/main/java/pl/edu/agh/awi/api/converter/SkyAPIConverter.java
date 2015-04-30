@@ -6,6 +6,7 @@ import pl.edu.agh.awi.persistence.model.weather_condition.SkyCondition;
 
 @Component
 public class SkyAPIConverter extends AbstractConverter<SkyCondition, SkyConditionAPIObject> {
+
     @Override
     public SkyConditionAPIObject convert(SkyCondition source, boolean deep) {
         if (source == null) {

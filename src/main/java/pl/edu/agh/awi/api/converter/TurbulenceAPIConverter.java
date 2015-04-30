@@ -6,6 +6,7 @@ import pl.edu.agh.awi.persistence.model.weather_condition.TurbulenceCondition;
 
 @Component
 public class TurbulenceAPIConverter extends AbstractConverter<TurbulenceCondition, TurbulenceConditionAPIObject> {
+
     @Override
     public TurbulenceConditionAPIObject convert(TurbulenceCondition source, boolean deep) {
         if (source == null) {

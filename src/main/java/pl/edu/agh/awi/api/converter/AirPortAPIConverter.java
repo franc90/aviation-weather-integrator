@@ -10,10 +10,13 @@ public class AirPortAPIConverter extends AbstractConverter<AirPort, AirPortAPIOb
 
     @Autowired
     private FlightAPIConverter flightAPIConverter;
+
     @Autowired
     private AirSigmetAPIConverter airSigmetAPIConverter;
+
     @Autowired
     private MetarsAPIConverter metarsAPIConverter;
+
     @Autowired
     private TafsAPIConverter tafsAPIConverter;
 
