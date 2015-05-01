@@ -39,7 +39,7 @@ public class AirlineController {
     @RequestMapping(value = "{iata}/flights", method = RequestMethod.GET)
     public Set<FlightAPIObject> getFlights(@PathVariable(value = "iata") String iata) {
         Set<Flight> persistedFlights = new HashSet<>(persistenceService.findFlightsByAirLineIataCode(iata));
-        Set<FlightAPIObject> flights = flightAPIConverter.convert(persistedFlights, false);
+        Set<FlightAPIObject> flights = flightAPIConverter.convert(persistedFlights, true);
         return flights;
     }
 
