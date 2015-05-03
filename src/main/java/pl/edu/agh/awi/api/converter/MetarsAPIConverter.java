@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import pl.edu.agh.awi.api.model.MetarAPIObject;
 import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
 
+import java.util.Optional;
+
 @Component
 public class MetarsAPIConverter extends AbstractConverter<Metar, MetarAPIObject> {
 
@@ -12,15 +14,30 @@ public class MetarsAPIConverter extends AbstractConverter<Metar, MetarAPIObject>
     private WeatherAPIConverter weatherAPIConverter;
 
     @Override
-    public MetarAPIObject convert(Metar source, boolean deep) {
-        if (source == null) {
-            return null;
+    public MetarAPIObject deepConvert(Optional<Metar> source) {
+        if (source.isPresent()) {
+            MetarAPIObject converted = getConverted(source.get());
+            weatherAPIConverter.deepConvert(converted, source.get());
+            return converted;
         }
+        return null;
+    }
 
+    @Override
+    public MetarAPIObject convert(Optional<Metar> source) {
+        if (source.isPresent()) {
+            MetarAPIObject converted = getConverted(source.get());
+            weatherAPIConverter.convert(converted, source.get());
+            return converted;
+        }
+        return null;
+    }
+
+    @Override
+    public MetarAPIObject getConverted(Metar source) {
         MetarAPIObject target = new MetarAPIObject();
-        weatherAPIConverter.convert(target, source, deep);
-        target.setTimestamp(source.getTimestamp());
 
+        target.setTimestamp(source.getTimestamp());
         return target;
     }
 }

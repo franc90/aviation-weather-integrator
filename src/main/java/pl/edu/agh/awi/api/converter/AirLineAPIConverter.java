@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import pl.edu.agh.awi.api.model.AirLineAPIObject;
 import pl.edu.agh.awi.persistence.model.AirLine;
 
+import java.util.Optional;
+
 @Component
 public class AirLineAPIConverter extends AbstractConverter<AirLine, AirLineAPIObject> {
 
@@ -12,18 +14,21 @@ public class AirLineAPIConverter extends AbstractConverter<AirLine, AirLineAPIOb
     private FlightAPIConverter flightAPIConverter;
 
     @Override
-    public AirLineAPIObject convert(AirLine source, boolean deep) {
-        if (source == null) {
-            return null;
+    public AirLineAPIObject deepConvert(Optional<AirLine> source) {
+        if (source.isPresent()) {
+            AirLineAPIObject converted = getConverted(source.get());
+            converted.setFlights(flightAPIConverter.convert(source.get().getFlights()));
+            return converted;
         }
+        return null;
+    }
 
+    @Override
+    public AirLineAPIObject getConverted(AirLine source) {
         AirLineAPIObject airline = new AirLineAPIObject();
         airline.setName(source.getName());
         airline.setIcaoCode(source.getIcaoCode());
         airline.setIataCode(source.getIataCode());
-        if (deep) {
-            airline.setFlights(flightAPIConverter.convert(source.getFlights(), false));
-        }
 
         return airline;
     }

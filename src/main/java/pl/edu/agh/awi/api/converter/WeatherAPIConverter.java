@@ -18,7 +18,7 @@ public class WeatherAPIConverter {
     private TurbulenceAPIConverter turbulenceAPIConverter;
 
 
-    public AbstractWeatherAPIObject convert(AbstractWeatherAPIObject target, AbstractWeatherCondition source, boolean deep) {
+    public AbstractWeatherAPIObject convert(AbstractWeatherAPIObject target, AbstractWeatherCondition source) {
         target.setDewPointTemperature(source.getDewPointTemperature());
         target.setInfoType(source.getInfoType());
         target.setPercipation(source.getPercipation());
@@ -29,14 +29,17 @@ public class WeatherAPIConverter {
         target.setWindGust(source.getWindGust());
         target.setWindSpeed(source.getWindSpeed());
 
-        if (deep) {
-            target.setIcingConditions(icingAPIConverter.convert(source.getIcingConditions(), false));
-            target.setSkyConditions(skyAPIConverter.convert(source.getSkyConditions(), false));
-            target.setTurbulenceConditions(turbulenceAPIConverter.convert(source.getTurbulenceConditions(), false));
-        }
-
         return target;
     }
 
+    public AbstractWeatherAPIObject deepConvert(AbstractWeatherAPIObject target, AbstractWeatherCondition source) {
+        convert(target, source);
+
+        target.setIcingConditions(icingAPIConverter.convert(source.getIcingConditions()));
+        target.setSkyConditions(skyAPIConverter.convert(source.getSkyConditions()));
+        target.setTurbulenceConditions(turbulenceAPIConverter.convert(source.getTurbulenceConditions()));
+
+        return target;
+    }
 
 }

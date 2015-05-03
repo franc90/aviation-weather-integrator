@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import pl.edu.agh.awi.api.model.FlightAPIObject;
 import pl.edu.agh.awi.persistence.model.Flight;
 
+import java.util.Optional;
+
 @Component
 public class FlightAPIConverter extends AbstractConverter<Flight, FlightAPIObject> {
 
@@ -18,11 +20,17 @@ public class FlightAPIConverter extends AbstractConverter<Flight, FlightAPIObjec
     private DestinationAirPortAPIConverter destinationAirPortConverter;
 
     @Override
-    public FlightAPIObject convert(Flight source, boolean deep) {
-        if (source == null) {
-            return null;
+    public FlightAPIObject deepConvert(Optional<Flight> source) {
+        if (source.isPresent()) {
+            FlightAPIObject converted = getConverted(source.get());
+            converted.setArrivalAirports(destinationAirPortConverter.convert(source.get().getArrivalAirports()));
+            return converted;
         }
+        return null;
+    }
 
+    @Override
+    public FlightAPIObject getConverted(Flight source) {
         FlightAPIObject flight = new FlightAPIObject();
 
         flight.setFlightId(source.getFlightId());
@@ -32,15 +40,9 @@ public class FlightAPIConverter extends AbstractConverter<Flight, FlightAPIObjec
         flight.setScheduledDepartureTime(source.getScheduledDepartureTime());
         flight.setAircraft(source.getAircraft());
         flight.setStatus(source.getStatus());
-        flight.setAirLine(airLineAPIConverter.convert(source.getAirLine(), false));
-        flight.setDepartureAirport(airPortAPIConverter.convert(source.getDepartureAirport(), false));
-
-        if (deep) {
-            flight.setArrivalAirports(destinationAirPortConverter.convert(source.getArrivalAirports(), false));
-        }
+        flight.setAirLine(airLineAPIConverter.convert(Optional.ofNullable(source.getAirLine())));
+        flight.setDepartureAirport(airPortAPIConverter.convert(Optional.ofNullable(source.getDepartureAirport())));
 
         return flight;
     }
-
-
 }

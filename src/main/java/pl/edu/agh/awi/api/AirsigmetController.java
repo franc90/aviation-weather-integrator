@@ -26,7 +26,7 @@ public class AirsigmetController {
     @RequestMapping(value = "{iata}", method = RequestMethod.GET)
     public Set<AirSigmetAPIObject> get(@PathVariable(value = "iata") String iata) {
         Set<AirSigmet> persistedMetars = new HashSet<>(persistenceService.findAirSigmetByAirportIata(iata));
-        Set<AirSigmetAPIObject> convert = airSigmetAPIConverter.convert(persistedMetars, true);
+        Set<AirSigmetAPIObject> convert = airSigmetAPIConverter.deepConvert(persistedMetars);
         return convert;
     }
 
