@@ -26,7 +26,7 @@ public class TafController {
     @RequestMapping(value = "{iata}", method = RequestMethod.GET)
     public Set<TafAPIObject> get(@PathVariable(value = "iata") String iata) {
         Set<Taf> persistedMetars = new HashSet<>(persistenceService.findTafByAirportIata(iata));
-        Set<TafAPIObject> convert = tafsAPIConverter.convert(persistedMetars, true);
+        Set<TafAPIObject> convert = tafsAPIConverter.deepConvert(persistedMetars);
         return convert;
     }
 

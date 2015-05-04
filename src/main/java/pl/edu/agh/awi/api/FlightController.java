@@ -16,6 +16,7 @@ import pl.edu.agh.awi.persistence.model.AirPort;
 import pl.edu.agh.awi.persistence.model.DestinationAirPort;
 import pl.edu.agh.awi.persistence.model.Flight;
 
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -40,7 +41,7 @@ public class FlightController {
     @RequestMapping(value = "{flightId}", method = RequestMethod.GET)
     public FlightAPIObject get(@PathVariable(value = "flightId") String flightId) {
         Flight flightByFlightId = persistenceService.findFlightByFlightId(flightId);
-        FlightAPIObject flight = flightAPIConverter.convert(flightByFlightId, true);
+        FlightAPIObject flight = flightAPIConverter.deepConvert(Optional.ofNullable(flightByFlightId));
         return flight;
     }
 
@@ -48,7 +49,7 @@ public class FlightController {
     public AirLineAPIObject getAirline(@PathVariable(value = "flightId") String flightId) {
         Flight flightByFlightId = persistenceService.findFlightByFlightId(flightId);
         AirLine airLine = flightByFlightId.getAirLine();
-        AirLineAPIObject convert = airLineAPIConverter.convert(airLine, true);
+        AirLineAPIObject convert = airLineAPIConverter.deepConvert(Optional.ofNullable(airLine));
         return convert;
     }
 
@@ -56,7 +57,7 @@ public class FlightController {
     public AirPortAPIObject getDepartureAirport(@PathVariable(value = "flightId") String flightId) {
         Flight flightByFlightId = persistenceService.findFlightByFlightId(flightId);
         AirPort departureAirport = flightByFlightId.getDepartureAirport();
-        AirPortAPIObject convert = airPortAPIConverter.convert(departureAirport, false);
+        AirPortAPIObject convert = airPortAPIConverter.convert(Optional.ofNullable(departureAirport));
         return convert;
     }
 
@@ -64,7 +65,7 @@ public class FlightController {
     public Set<AirPortAPIObject> getArrivalAirport(@PathVariable(value = "flightId") String flightId) {
         Flight flightByFlightId = persistenceService.findFlightByFlightId(flightId);
         Set<DestinationAirPort> arrivalAirports = flightByFlightId.getArrivalAirports();
-        Set<AirPortAPIObject> convert = destinationAirPortAPIConverter.convert(arrivalAirports, false);
+        Set<AirPortAPIObject> convert = destinationAirPortAPIConverter.convert(arrivalAirports);
         return convert;
     }
 

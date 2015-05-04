@@ -14,6 +14,7 @@ import pl.edu.agh.awi.persistence.model.AirLine;
 import pl.edu.agh.awi.persistence.model.Flight;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -32,14 +33,14 @@ public class AirlineController {
     @RequestMapping(value = "{iata}", method = RequestMethod.GET)
     public AirLineAPIObject get(@PathVariable(value = "iata") String iata) {
         AirLine persistedAirline = persistenceService.findAirLineByIataCode(iata);
-        AirLineAPIObject airline = airLineAPIConverter.convert(persistedAirline, false);
+        AirLineAPIObject airline = airLineAPIConverter.convert(Optional.ofNullable(persistedAirline));
         return airline;
     }
 
     @RequestMapping(value = "{iata}/flights", method = RequestMethod.GET)
     public Set<FlightAPIObject> getFlights(@PathVariable(value = "iata") String iata) {
         Set<Flight> persistedFlights = new HashSet<>(persistenceService.findFlightsByAirLineIataCode(iata));
-        Set<FlightAPIObject> flights = flightAPIConverter.convert(persistedFlights, true);
+        Set<FlightAPIObject> flights = flightAPIConverter.convert(persistedFlights);
         return flights;
     }
 

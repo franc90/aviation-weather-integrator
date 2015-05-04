@@ -26,7 +26,7 @@ public class MetarController {
     @RequestMapping(value = "{iata}", method = RequestMethod.GET)
     public Set<MetarAPIObject> get(@PathVariable(value = "iata") String iata) {
         Set<Metar> persistedMetars = new HashSet<>(persistenceService.findMetarByAirportIata(iata));
-        Set<MetarAPIObject> convert = metarsAPIConverter.convert(persistedMetars, true);
+        Set<MetarAPIObject> convert = metarsAPIConverter.deepConvert(persistedMetars);
         return convert;
     }
 

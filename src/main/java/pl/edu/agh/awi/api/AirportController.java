@@ -15,6 +15,7 @@ import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
 import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -43,42 +44,42 @@ public class AirportController {
     @RequestMapping(value = "{iata}", method = RequestMethod.GET)
     public AirPortAPIObject get(@PathVariable(value = "iata") String iata) {
         AirPort persistedAirport = persistenceService.findAirPortByIataCode(iata);
-        AirPortAPIObject airport = airPortAPIConverter.convert(persistedAirport, false);
+        AirPortAPIObject airport = airPortAPIConverter.convert(Optional.ofNullable(persistedAirport));
         return airport;
     }
 
     @RequestMapping(value = "{iata}/in", method = RequestMethod.GET)
     public Set<FlightAPIObject> getIncomingFlights(@PathVariable(value = "iata") String iata) {
         Set<Flight> persistedFlights = new HashSet<>(persistenceService.findFlightByArrivalAirportIataCode(iata));
-        Set<FlightAPIObject> flights = flightAPIConverter.convert(persistedFlights, false);
+        Set<FlightAPIObject> flights = flightAPIConverter.convert(persistedFlights);
         return flights;
     }
 
     @RequestMapping(value = "{iata}/out", method = RequestMethod.GET)
     public Set<FlightAPIObject> getOutgoingFlights(@PathVariable(value = "iata") String iata) {
         Set<Flight> persistedFlights = new HashSet<>(persistenceService.findFlightByDepartureAirportIataCode(iata));
-        Set<FlightAPIObject> flights = flightAPIConverter.convert(persistedFlights, false);
+        Set<FlightAPIObject> flights = flightAPIConverter.convert(persistedFlights);
         return flights;
     }
 
     @RequestMapping(value = "{iata}/metar", method = RequestMethod.GET)
     public Set<MetarAPIObject> getMetars(@PathVariable(value = "iata") String iata) {
         Set<Metar> persistedMetars = new HashSet<>(persistenceService.findMetarByAirportIata(iata));
-        Set<MetarAPIObject> convert = metarsAPIConverter.convert(persistedMetars, true);
+        Set<MetarAPIObject> convert = metarsAPIConverter.deepConvert(persistedMetars);
         return convert;
     }
 
     @RequestMapping(value = "{iata}/taf", method = RequestMethod.GET)
     public Set<TafAPIObject> getTafs(@PathVariable(value = "iata") String iata) {
         Set<Taf> persistedTafs = new HashSet<>(persistenceService.findTafByAirportIata(iata));
-        Set<TafAPIObject> convert = tafsAPIConverter.convert(persistedTafs, true);
+        Set<TafAPIObject> convert = tafsAPIConverter.deepConvert(persistedTafs);
         return convert;
     }
 
     @RequestMapping(value = "{iata}/airsigmet", method = RequestMethod.GET)
     public Set<AirSigmetAPIObject> getAirSigmets(@PathVariable(value = "iata") String iata) {
         Set<AirSigmet> persistedAirSigmets = new HashSet<>(persistenceService.findAirSigmetByAirportIata(iata));
-        Set<AirSigmetAPIObject> convert = airSigmetAPIConverter.convert(persistedAirSigmets, true);
+        Set<AirSigmetAPIObject> convert = airSigmetAPIConverter.deepConvert(persistedAirSigmets);
         return convert;
     }
 
