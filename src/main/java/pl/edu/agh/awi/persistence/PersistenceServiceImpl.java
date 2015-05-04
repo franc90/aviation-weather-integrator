@@ -86,7 +86,7 @@ public class PersistenceServiceImpl implements PersistenceService {
     @Override
     @Transactional
     public Collection<Flight> findFlightByDepartureAirportIataCode(String iata) {
-        return flightRepository.findByDepartureAirportIcaoCode(iata);
+        return flightRepository.findByDepartureAirportIata  Code(iata);
     }
 
     @Override
