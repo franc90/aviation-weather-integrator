@@ -13,7 +13,7 @@
 ### 3. Sposób uruchamiania
 Aby uruchomić aplikację, w folderze *source_code* należy wykonać komendę *./gradlew bootRun*. Spowoduje to uruchomienie aplikacji, która zarejestruje joby pobierające dane z serwisów i jednocześnie API pozwalające na przeglądanie aktualnej zawartości bazy danych.
 
-##### 3.1 Istnieje możliwość kontynuowania pobierania danych dostarczonych w pliku *database.zip*. Należy rozpakować jego zawartość do katalogy *source_code* i uruchomić aplikację normalnie.
+3.1 Istnieje możliwość kontynuowania pobierania danych dostarczonych w pliku *database.zip*. Należy rozpakować jego zawartość do katalogy *source_code* i uruchomić aplikację normalnie.
 
 ### 4. Przeglądanie zawartości bazy danych
 Aby przeglądać zawartość bazy danych można wykorzytać aplikację - wówczas należy postąpić jak w punkcie 3.1.
