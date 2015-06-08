@@ -8,7 +8,6 @@ import pl.edu.agh.awi.persistence.model.weather_condition.AirSigmet;
 import pl.edu.agh.awi.persistence.model.weather_condition.Metar;
 import pl.edu.agh.awi.persistence.model.weather_condition.Taf;
 import pl.edu.agh.awi.persistence.repositories.*;
-import pl.edu.agh.awi.scheduler.exception.SchedulerException;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -32,6 +31,15 @@ public class PersistenceServiceImpl implements PersistenceService {
 
     @Autowired
     private AirLineRepository airLineRepository;
+
+    @Autowired
+    private AirSigmetRepository airSigmetRepository;
+
+    @Autowired
+    private MetarRepository metarRepository;
+
+    @Autowired
+    private TafRepository tafRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -67,6 +75,24 @@ public class PersistenceServiceImpl implements PersistenceService {
     @Transactional(readOnly = true)
     public Collection<AirPort> findAllAirPorts() {
         return airPortRepository.findAll().as(Collection.class);
+    }
+
+    @Override
+    @Transactional
+    public Collection<Flight> findFlightsByAirLineIataCode(String iata) {
+        return flightRepository.findByAirLineIataCode(iata);
+    }
+
+    @Override
+    @Transactional
+    public Collection<Flight> findFlightByDepartureAirportIataCode(String iata) {
+        return flightRepository.findByDepartureAirportIataCode(iata);
+    }
+
+    @Override
+    @Transactional
+    public Collection<Flight> findFlightByArrivalAirportIataCode(String iata) {
+        return flightRepository.findByArrivalAirportIataCode(iata);
     }
 
     @Override
@@ -121,6 +147,21 @@ public class PersistenceServiceImpl implements PersistenceService {
     @Transactional
     public void addAirsigmet(AirPort airport, AirSigmet airSigmet) {
         airport.addAirSigmet(airSigmet);
+    }
+
+    @Override
+    public Collection<Metar> findMetarByAirportIata(String iata) {
+        return metarRepository.findByAirportIata(iata);
+    }
+
+    @Override
+    public Collection<Taf> findTafByAirportIata(String iata) {
+        return tafRepository.findByAirportIata(iata);
+    }
+
+    @Override
+    public Collection<AirSigmet> findAirSigmetByAirportIata(String iata) {
+        return airSigmetRepository.findByAirportIata(iata);
     }
 
     public <T> T extractFirstElement(Iterable<T> iterable) {
